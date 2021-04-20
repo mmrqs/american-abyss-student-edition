@@ -12,6 +12,10 @@ The trello for the project is available [here](https://trello.com/b/ohfT6t74 "tr
 - [x] setup trello
 - [x] identify similar games
 ### To be done for the next sprint
+- Main menu creation
+- Setup the clickable map
+- Read about game networking management in Unity
+- Select assets for pawns
 
 ## Sprint 1 - 4/20/2021 -> 4/27/2021
 ### Achievements
