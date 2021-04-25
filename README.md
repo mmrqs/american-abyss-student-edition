@@ -19,5 +19,10 @@ The trello for the project is available [here](https://trello.com/b/ohfT6t74 "tr
 
 ## Sprint 1 - 4/20/2021 -> 4/27/2021
 ### Achievements
-
+- [x] Create main menu
+- [x] Check on how the game risk is managing his gameplay
+- [ ] Create winning and losing menu
+- [ ] Setup the map of the USA
+- [ ] Read about game networking management in unity
+- [ ] Select assets for pawns
 ### To be done for the next sprint
