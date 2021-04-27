@@ -21,8 +21,8 @@ The trello for the project is available [here](https://trello.com/b/ohfT6t74 "tr
 ### Achievements
 - [x] Create main menu
 - [x] Check on how the game risk is managing his gameplay
-- [ ] Create winning and losing menu
+- [x] Create winning and losing menu
 - [x] Setup the map of the USA
 - [x] Read about game networking management in unity
-- [ ] Select assets for pawns
+- [x] Select assets for pawns
 ### To be done for the next sprint
