@@ -22,7 +22,7 @@ The trello for the project is available [here](https://trello.com/b/ohfT6t74 "tr
 - [x] Create main menu
 - [x] Check on how the game risk is managing his gameplay
 - [ ] Create winning and losing menu
-- [ ] Setup the map of the USA
-- [ ] Read about game networking management in unity
+- [x] Setup the map of the USA
+- [x] Read about game networking management in unity
 - [ ] Select assets for pawns
 ### To be done for the next sprint
