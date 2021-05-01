@@ -26,3 +26,13 @@ The trello for the project is available [here](https://trello.com/b/ohfT6t74 "tr
 - [x] Read about game networking management in unity
 - [x] Select assets for pawns
 ### To be done for the next sprint
+- Setup players turn
+- Put troops on the map
+- Move troops on the map
+
+## Sprint 2 - 4/27/2021 -> 5/4/2021
+### Achievements
+- [x] Setup players turn
+- [x] Put troops on the map
+- [x] Move troops on the map
+### To be done for the next sprint
