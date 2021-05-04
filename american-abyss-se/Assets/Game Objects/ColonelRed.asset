@@ -13,3 +13,7 @@ MonoBehaviour:
   m_Name: ColonelRed
   m_EditorClassIdentifier: 
   _name: Colonel Red
+  _unit: {fileID: 3869041195202776726, guid: d59d978c50103744a8f6d3c22df9d7dd, type: 3}
+  _numberOfUnits: 0
+  _background: 
+  _setup: []
