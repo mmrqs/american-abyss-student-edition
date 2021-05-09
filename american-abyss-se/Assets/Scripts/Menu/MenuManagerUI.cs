@@ -25,4 +25,14 @@ public class MenuManagerUI : MonoBehaviour
         menu.SetActive(!isActive);
         isActive = !isActive;
     }
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
+
+    public void Options()
+    {
+        
+    }
 }
