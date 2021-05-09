@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [Serializable]
 public enum Area
@@ -31,4 +32,7 @@ public class Character : ScriptableObject
 
     [SerializeField] protected List<SetupZone> _setup;
     public List<SetupZone> Setup => _setup;
+
+    [SerializeField] protected Image _image;
+    public Image Image => _image;
 }
