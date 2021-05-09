@@ -11,11 +11,13 @@ public class GameManager : MonoBehaviour
     [Header("Characters")]
     public List<Character> characters;
 
-    [Header("field character's name")]
+    [Header("Current character info")]
     public TMPro.TMP_Text characterName;
 
-    [Header("Recruit Button")]
-    public Button recruitButton;
+    public Image imageCurrent;
+
+    public List<Image> images;
+    
 
     private int index = 0;
     private Character currentCharacter;

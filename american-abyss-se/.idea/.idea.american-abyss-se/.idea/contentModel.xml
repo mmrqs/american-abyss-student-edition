@@ -115,6 +115,9 @@
           <e p="ClonableSO.cs" t="Include" />
           <e p="GameManager.cs" t="Include" />
           <e p="InputManager.cs" t="Include" />
+          <e p="Menu" t="Include">
+            <e p="MenuManagerUI.cs" t="Include" />
+          </e>
           <e p="MenuManager.cs" t="Include" />
           <e p="SetupZone.cs" t="Include" />
           <e p="Unit.cs" t="Include" />
