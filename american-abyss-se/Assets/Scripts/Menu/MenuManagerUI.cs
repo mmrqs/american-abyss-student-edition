@@ -5,13 +5,18 @@ using UnityEngine;
 public class MenuManagerUI : MonoBehaviour
 {
     public GameObject menu;
-    private bool isActive;
+    private bool isActiveMenu;
+
+    public GameObject options;
+    private bool isActiveOptions;
     
     // Start is called before the first frame update
     void Start()
     {
         menu.SetActive(false);
-        isActive = false;
+        options.SetActive(false);
+        isActiveMenu = false;
+        isActiveOptions = false;
     }
 
     // Update is called once per frame
@@ -22,8 +27,12 @@ public class MenuManagerUI : MonoBehaviour
 
     public void DisplayMenu()
     {
-        menu.SetActive(!isActive);
-        isActive = !isActive;
+        menu.SetActive(!isActiveMenu);
+        isActiveMenu = !isActiveMenu;
+        
+        if(isActiveOptions)
+            options.SetActive(false);
+        isActiveOptions = false;
     }
 
     public void Quit()
@@ -31,8 +40,9 @@ public class MenuManagerUI : MonoBehaviour
         Application.Quit();
     }
 
-    public void Options()
+    public void DisplayRules()
     {
-        
+        options.SetActive(true);
+        isActiveOptions = true;
     }
 }
