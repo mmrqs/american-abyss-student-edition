@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
@@ -17,42 +18,29 @@ public class GameManager : MonoBehaviour
     public Image imageCurrent;
 
     public List<Image> images;
+
+    public CanvasGroup recruitMessage;
     
 
-    private int index = 0;
+    private int index;
     private Character currentCharacter;
-
-    private bool recruitment = false;
-    private GameObject current = null;
-    private Camera cam;
-    public LayerMask layer;
 
     void Start()
     {
         if (characters == null)
             throw new Exception("Empty character list");
+        recruitMessage.gameObject.SetActive(false);
 
         // we make the order of player random
         System.Random rng = new System.Random();
         characters = characters.OrderBy(a => rng.Next()).ToList();
-        cam = Camera.main;
         NextTurn();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (recruitment)
-        {
-            Ray camRay = cam.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            int layerMask = 1 << 8;
-
-            if (Physics.Raycast(camRay, out hit, layerMask))
-            {
-                current.transform.position = new Vector3(hit.point.x, current.transform.position.y, hit.point.z);
-            }
-        }
+        
     }
 
     public void NextTurn()
@@ -68,7 +56,28 @@ public class GameManager : MonoBehaviour
 
     public void Recruit()
     {
-        recruitment = true;
-        current = Instantiate(currentCharacter.Unit.gameObject, new Vector3((float)0.15, (float)2.62, (float)-2.8), Quaternion.identity);       
+        //current = Instantiate(currentCharacter.Unit.gameObject, new Vector3((float)0.15, (float)2.62, (float)-2.8), Quaternion.identity);       
+        recruitMessage.gameObject.SetActive(true);
+        StartCoroutine(FadeCanvasGroup(recruitMessage, recruitMessage.alpha, 0, 1));
+    }
+
+    public IEnumerator FadeCanvasGroup(CanvasGroup cg, float start, float end, float lerpTime = 1)
+    {
+        yield return new WaitForSeconds(1.5f);
+        var startingTime = Time.time;
+
+        while (true)
+        {
+            var timeSinceStarted = Time.time - startingTime;
+            var percentageComplete = timeSinceStarted / lerpTime;
+
+            var currentValue = Mathf.Lerp(start, end, percentageComplete);
+
+            cg.alpha = currentValue;
+
+            if (percentageComplete >= 1) break;
+
+            yield return new WaitForFixedUpdate();
+        }
     }
 }
