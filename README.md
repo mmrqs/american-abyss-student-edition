@@ -36,3 +36,13 @@ The trello for the project is available [here](https://trello.com/b/ohfT6t74 "tr
 - [x] Put troops on the map
 - [x] Move troops on the map
 ### To be done for the next sprint
+- Create rules Menu
+- Create option Menu
+
+## Sprint 3 - 5/4/2021 -> 5/11/2021
+### Achievements
+- [x] Create title for the main menu
+- [x] Create rules menu
+- [x] Create option menu
+### To be done for the next sprint
+- Polish the game
