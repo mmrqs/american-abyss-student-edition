@@ -28,7 +28,12 @@ public class AreaManager : MonoBehaviour
     {
         StartCoroutine(AreaSelection());
     }
-    
+
+    public void PutTroopOnArea(GameObject troopModel, GameObject area)
+    {
+        
+    }
+
     private IEnumerator AreaSelection()
     {
         while (true)
