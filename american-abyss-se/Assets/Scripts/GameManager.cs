@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     [Header("Current character info")]
     public TMPro.TMP_Text characterName;
 
+    public AreaManager areaManager;
+    
     public Image imageCurrent;
 
     public List<Image> images;
@@ -59,6 +61,8 @@ public class GameManager : MonoBehaviour
         //current = Instantiate(currentCharacter.Unit.gameObject, new Vector3((float)0.15, (float)2.62, (float)-2.8), Quaternion.identity);       
         recruitMessage.gameObject.SetActive(true);
         StartCoroutine(FadeCanvasGroup(recruitMessage, recruitMessage.alpha, 0, 1));
+        
+        areaManager.SelectArea();
     }
 
     public IEnumerator FadeCanvasGroup(CanvasGroup cg, float start, float end, float lerpTime = 1)

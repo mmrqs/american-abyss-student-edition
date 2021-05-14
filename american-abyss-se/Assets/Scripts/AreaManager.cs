@@ -21,19 +21,33 @@ public class AreaManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Ray camRay = cam.ScreenPointToRay(Input.mousePosition);
+        
+    }
 
-        if (Physics.Raycast(camRay, out theObject))
+    public void SelectArea()
+    {
+        StartCoroutine(AreaSelection());
+    }
+    
+    private IEnumerator AreaSelection()
+    {
+        while (true)
         {
-            if (current == null || !current.Equals(theObject.transform.gameObject))
-            {
-                if(current != null)
-                    current.transform.gameObject.GetComponent<Renderer>().material.color = currentColor;
-                current = theObject.transform.gameObject;
-                currentColor = current.transform.gameObject.GetComponent<Renderer>().material.color;
+            Ray camRay = cam.ScreenPointToRay(Input.mousePosition);
 
+            if (Physics.Raycast(camRay, out theObject))
+            {
+                if (current == null || !current.Equals(theObject.transform.gameObject))
+                {
+                    if(current != null)
+                        current.transform.gameObject.GetComponent<Renderer>().material.color = currentColor;
+                    current = theObject.transform.gameObject;
+                    currentColor = current.transform.gameObject.GetComponent<Renderer>().material.color;
+
+                }
+                theObject.transform.gameObject.GetComponent<Renderer>().material.color = Color.Lerp(Color.white, Color.black, Mathf.PingPong(Time.time, 1));
             }
-            theObject.transform.gameObject.GetComponent<Renderer>().material.color = Color.Lerp(Color.white, Color.black, Mathf.PingPong(Time.time, 1));
+            yield return new WaitForSeconds(.1f);
         }
     }
 }

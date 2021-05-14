@@ -789,6 +789,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7cfea36ee87a3fd4586acc3350d35cd6, type: 2}
   - {fileID: 11400000, guid: 4accadf6fd4d7964eb177c11aac2fb05, type: 2}
   characterName: {fileID: 975970383}
+  areaManager: {fileID: 1148345839}
   imageCurrent: {fileID: 0}
   images: []
   recruitMessage: {fileID: 946493714}
