@@ -22,7 +22,8 @@ public class GameManager : MonoBehaviour
     public List<Image> images;
 
     public CanvasGroup recruitMessage;
-    
+
+    public Button recruitment;
 
     private int index;
     private Character currentCharacter;
@@ -39,13 +40,7 @@ public class GameManager : MonoBehaviour
         characters = characters.OrderBy(a => rng.Next()).ToList();
         NextTurn();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    
     public void NextTurn()
     {
         if (index >= characters.Count)
@@ -53,7 +48,7 @@ public class GameManager : MonoBehaviour
 
         currentCharacter = characters[index];
         characterName.SetText(currentCharacter.Name);
-
+        recruitment.enabled = true;
         index++;
     }
 
@@ -62,7 +57,8 @@ public class GameManager : MonoBehaviour
         //current = Instantiate(currentCharacter.Unit.gameObject, new Vector3((float)0.15, (float)2.62, (float)-2.8), Quaternion.identity);       
         recruitMessage.gameObject.SetActive(true);
         StartCoroutine(FadeCanvasGroup(recruitMessage, recruitMessage.alpha, 0, 1));
-        
+
+        recruitment.enabled = false;
         areaManager.SelectArea();
     }
 

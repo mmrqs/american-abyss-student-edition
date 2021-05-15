@@ -43,8 +43,9 @@ public class AreaManager : MonoBehaviour
 
                 if (Input.GetMouseButton(0))
                 {
+                    current.transform.gameObject.GetComponent<Renderer>().material.color = currentColor;
                     PutTroopOnArea(current.gameObject);
-                    //test = false;
+                    test = false;
                 }
             }
         }

@@ -1255,6 +1255,7 @@ MonoBehaviour:
   imageCurrent: {fileID: 0}
   images: []
   recruitMessage: {fileID: 946493714}
+  recruitment: {fileID: 109617132}
 --- !u!114 &122936454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1332,8 +1333,8 @@ RectTransform:
   - {fileID: 1344418378}
   - {fileID: 334279098}
   - {fileID: 353791909}
-  - {fileID: 946493709}
   - {fileID: 1053198083}
+  - {fileID: 946493709}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6570,7 +6571,7 @@ RectTransform:
   - {fileID: 1988472476}
   - {fileID: 414574516}
   m_Father: {fileID: 122936457}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -7339,7 +7340,7 @@ RectTransform:
   - {fileID: 1906373794}
   - {fileID: 2132631542}
   m_Father: {fileID: 122936457}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
