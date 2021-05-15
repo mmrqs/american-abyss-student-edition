@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: PresidentBlue
   m_EditorClassIdentifier: 
   _name: ' President Blue'
+  _numberOfUnits: 12
+  _background: 
+  _image: {fileID: 0}

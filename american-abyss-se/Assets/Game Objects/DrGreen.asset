@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: DrGreen
   m_EditorClassIdentifier: 
   _name: Dr. Green
+  _numberOfUnits: 6
+  _background: 
+  _image: {fileID: 0}

@@ -54,12 +54,19 @@ public class GameManager : MonoBehaviour
 
     public void Recruit()
     {
-        //current = Instantiate(currentCharacter.Unit.gameObject, new Vector3((float)0.15, (float)2.62, (float)-2.8), Quaternion.identity);       
-        recruitMessage.gameObject.SetActive(true);
-        StartCoroutine(FadeCanvasGroup(recruitMessage, recruitMessage.alpha, 0, 1));
+        int numberOfUnits = areaManager.troopManager.units
+            .Where(b => b.Character.Name == currentCharacter.Name)
+            .Sum(b => b.NumberOfUnits);
+        Debug.Log(numberOfUnits);
+        if (currentCharacter.NumberOfUnits > numberOfUnits)
+        {
+            recruitMessage.gameObject.SetActive(true);
+            StartCoroutine(FadeCanvasGroup(recruitMessage, recruitMessage.alpha, 0));
 
-        recruitment.enabled = false;
-        areaManager.SelectArea();
+            recruitment.enabled = false;
+            areaManager.SelectArea();
+        }
+        
     }
 
     public IEnumerator FadeCanvasGroup(CanvasGroup cg, float start, float end, float lerpTime = 1)

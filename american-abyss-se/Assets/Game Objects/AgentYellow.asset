@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: AgentYellow
   m_EditorClassIdentifier: 
   _name: Agent Yellow
+  _numberOfUnits: 6
+  _background: 
+  _image: {fileID: 0}
