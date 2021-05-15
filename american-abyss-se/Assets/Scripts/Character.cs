@@ -1,19 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-
-[Serializable]
-public enum Area
-{
-    NORTHWEST,
-    NORTH_CENTRAL,
-    MIDWEST,
-    NORTHEAST,
-    SOUTHEAST, 
-    SOUTH_CENTRAL,
-    SOUTHWEST
-}
 
 [CreateAssetMenu(menuName = "Character/Character")]
 public class Character : ScriptableObject

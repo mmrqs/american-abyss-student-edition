@@ -111,6 +111,7 @@
           </e>
         </e>
         <e p="Scripts" t="Include">
+          <e p="Area.cs" t="Include" />
           <e p="AreaManager.cs" t="Include" />
           <e p="Battalion.cs" t="Include" />
           <e p="Character.cs" t="Include" />
@@ -124,8 +125,8 @@
           <e p="SetupZone.cs" t="Include" />
           <e p="TroopsManager.cs" t="Include" />
           <e p="UI" t="Include">
-            <e p="SelectedFlash.cs" t="Include" />
             <e p="TroopsManagerUI.cs" t="Include" />
+            <e p="ZoneScoreUI.cs" t="Include" />
           </e>
         </e>
       </e>

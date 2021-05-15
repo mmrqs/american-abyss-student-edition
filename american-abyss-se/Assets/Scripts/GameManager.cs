@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
 
     private int index;
     private Character currentCharacter;
+    public Character Character => currentCharacter;
 
     void Start()
     {

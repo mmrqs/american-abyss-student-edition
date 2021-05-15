@@ -1,18 +1,23 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 public class AreaManager : MonoBehaviour
 {
-    public static string selectedObject;
-    public string internalObject;
-    public RaycastHit theObject;
+    private RaycastHit theObject;
     private Camera cam;
-
-    [FormerlySerializedAs("changing")] public bool flashing = false;
+    
     private GameObject current;
     private Color currentColor;
+
+    public TroopsManager troopManager;
+    public GameManager gameManager;
+
+    private bool test;
+    
     void Start()
     {
         cam = Camera.main;
@@ -21,22 +26,7 @@ public class AreaManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-    }
-
-    public void SelectArea()
-    {
-        StartCoroutine(AreaSelection());
-    }
-
-    public void PutTroopOnArea(GameObject troopModel, GameObject area)
-    {
-        
-    }
-
-    private IEnumerator AreaSelection()
-    {
-        while (true)
+        if (test)
         {
             Ray camRay = cam.ScreenPointToRay(Input.mousePosition);
 
@@ -48,11 +38,25 @@ public class AreaManager : MonoBehaviour
                         current.transform.gameObject.GetComponent<Renderer>().material.color = currentColor;
                     current = theObject.transform.gameObject;
                     currentColor = current.transform.gameObject.GetComponent<Renderer>().material.color;
-
                 }
                 theObject.transform.gameObject.GetComponent<Renderer>().material.color = Color.Lerp(Color.white, Color.black, Mathf.PingPong(Time.time, 1));
+
+                if (Input.GetMouseButton(0))
+                {
+                    PutTroopOnArea(current.gameObject);
+                    //test = false;
+                }
             }
-            yield return new WaitForSeconds(.1f);
         }
+    }
+
+    public void SelectArea()
+    {
+        test = true;
+    }
+    
+    public void PutTroopOnArea(GameObject area)
+    {
+        troopManager.AddUnitToZone(gameManager.Character, (Area)Enum.Parse(typeof(Area), area.name));
     }
 }

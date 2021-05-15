@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -25,5 +23,17 @@ public class Battalion
     {
         get => _numberOfUnits;
         set => _numberOfUnits = value;
+    }
+
+    public Battalion()
+    {
+        
+    }
+
+    public Battalion(Character character, Area area)
+    {
+        Character = character;
+        Area = area;
+        NumberOfUnits = 0;
     }
 }
