@@ -36,4 +36,16 @@ public class TroopsManager : MonoBehaviour
         units.Find(u => u.Character == character && u.Area == area).NumberOfUnits -= 1;
         troopsManagerUI.BuildUI(units);
     }
+
+    public List<Character> GetCharactersInZone(Area area)
+    {
+        return units.FindAll(b => b.Area == area)
+            .Select(b => b.Character)
+            .ToList();
+    }
+
+    public int GetNumberOfUnitsInArea(Area area, Character character)
+    {
+        return units.Find(b => b.Character.Name == character.Name && b.Area == area).NumberOfUnits;
+    }
 }

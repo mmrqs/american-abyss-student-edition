@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class AreaManager : MonoBehaviour
 {
@@ -15,9 +13,13 @@ public class AreaManager : MonoBehaviour
 
     public TroopsManager troopManager;
     public GameManager gameManager;
-
-    private bool test;
+    public ChooseFactionUI chooseFactionUI;
     
+    private bool test;
+
+    public List<Area> AllowedZones { get; set; }
+    public List<Character> Ennemies { get; set; }
+
     void Start()
     {
         cam = Camera.main;
@@ -26,38 +28,69 @@ public class AreaManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (test)
+        if (gameManager.CurrentMode != Mode.DEFAULT)
         {
             Ray camRay = cam.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(camRay, out theObject))
             {
-                if (current == null || !current.Equals(theObject.transform.gameObject))
+                switch (gameManager.CurrentMode)
                 {
-                    if(current != null)
-                        current.transform.gameObject.GetComponent<Renderer>().material.color = currentColor;
-                    current = theObject.transform.gameObject;
-                    currentColor = current.transform.gameObject.GetComponent<Renderer>().material.color;
-                }
-                theObject.transform.gameObject.GetComponent<Renderer>().material.color = Color.Lerp(Color.white, Color.black, Mathf.PingPong(Time.time, 1));
+                    case Mode.RECRUIT:
+                        if (current == null || !current.Equals(theObject.transform.gameObject))
+                        {
+                            if(current != null)
+                                current.transform.gameObject.GetComponent<Renderer>().material.color = currentColor;
+                            current = theObject.transform.gameObject;
+                            currentColor = current.transform.gameObject.GetComponent<Renderer>().material.color;
+                        }
+                        theObject.transform.gameObject.GetComponent<Renderer>().material.color = Color.Lerp(Color.white, Color.black, Mathf.PingPong(Time.time, 1));
 
-                if (Input.GetMouseButton(0))
-                {
-                    current.transform.gameObject.GetComponent<Renderer>().material.color = currentColor;
-                    PutTroopOnArea(current.gameObject);
-                    test = false;
+                        if (Input.GetMouseButton(0))
+                        {
+                            current.transform.gameObject.GetComponent<Renderer>().material.color = currentColor;
+                            PutTroopOnArea(current.gameObject);
+                        }
+                        break;
+                    
+                    case Mode.ATTACK:
+                        if (current == null || !current.Equals(theObject.transform.gameObject))
+                        {
+                            if(current != null)
+                                current.transform.gameObject.GetComponent<Renderer>().material.color = currentColor;
+                            current = theObject.transform.gameObject;
+                            currentColor = current.transform.gameObject.GetComponent<Renderer>().material.color;
+                        }
+
+                        if (AllowedZones.Contains((Area)Enum.Parse(typeof(Area), current.gameObject.name)))
+                        {
+                            theObject.transform.gameObject.GetComponent<Renderer>().material.color = Color.Lerp(Color.white, Color.black, Mathf.PingPong(Time.time, 1));
+
+                            if (Input.GetMouseButton(0))
+                            {
+                                current.transform.gameObject.GetComponent<Renderer>().material.color = currentColor;
+                                AttackArea(current.gameObject);
+                            }
+                        }
+                        break;
                 }
             }
         }
     }
 
-    public void SelectArea()
+    public void AttackArea(GameObject area)
     {
-        test = true;
+        chooseFactionUI.AreaUnderAttack = (Area) Enum.Parse(typeof(Area), area.name);
+        chooseFactionUI.Characters = troopManager
+            .GetCharactersInZone(chooseFactionUI.AreaUnderAttack)
+            .Where(c => c.Name != gameManager.Character.Name)
+            .ToList();
+        chooseFactionUI.show();
     }
     
     public void PutTroopOnArea(GameObject area)
     {
         troopManager.AddUnitToZone(gameManager.Character, (Area)Enum.Parse(typeof(Area), area.name));
+        gameManager.CurrentMode = Mode.DEFAULT;
     }
 }

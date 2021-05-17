@@ -8,31 +8,24 @@ public class MenuManagerUI : MonoBehaviour
     private bool isActiveMenu;
 
     public GameObject options;
-    private bool isActiveOptions;
+    public GameObject background;
     
     // Start is called before the first frame update
     void Start()
     {
         menu.SetActive(false);
         options.SetActive(false);
+        background.SetActive(false);
         isActiveMenu = false;
-        isActiveOptions = false;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    
     public void DisplayMenu()
     {
         menu.SetActive(!isActiveMenu);
         isActiveMenu = !isActiveMenu;
         
-        if(isActiveOptions)
-            options.SetActive(false);
-        isActiveOptions = false;
+        options.SetActive(false);
+        background.SetActive(false);
     }
 
     public void Quit()
@@ -43,6 +36,10 @@ public class MenuManagerUI : MonoBehaviour
     public void DisplayRules()
     {
         options.SetActive(true);
-        isActiveOptions = true;
+    }
+
+    public void DisplayBackground()
+    {
+        background.SetActive(true);
     }
 }

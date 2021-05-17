@@ -2,10 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Events;
+using Random = System.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,18 +15,28 @@ public class GameManager : MonoBehaviour
     public TMPro.TMP_Text characterName;
 
     public AreaManager areaManager;
+
+    public TroopsManager troopManager;
     
     public Image imageCurrent;
 
     public List<Image> images;
 
     public CanvasGroup recruitMessage;
-
+    public TMPro.TMP_Text popUpMessage;
+    
     public Button recruitment;
 
     private int index;
     private Character currentCharacter;
     public Character Character => currentCharacter;
+    
+    private Mode currentMode;
+    public Mode CurrentMode
+    {
+        get => currentMode;
+        set => currentMode = value;
+    }
 
     void Start()
     {
@@ -50,6 +59,8 @@ public class GameManager : MonoBehaviour
         characterName.SetText(currentCharacter.Name);
         recruitment.enabled = true;
         index++;
+
+        CurrentMode = Mode.DEFAULT;
     }
 
     public void Recruit()
@@ -57,16 +68,56 @@ public class GameManager : MonoBehaviour
         int numberOfUnits = areaManager.troopManager.units
             .Where(b => b.Character.Name == currentCharacter.Name)
             .Sum(b => b.NumberOfUnits);
-        Debug.Log(numberOfUnits);
+        
         if (currentCharacter.NumberOfUnits > numberOfUnits)
         {
-            recruitMessage.gameObject.SetActive(true);
-            StartCoroutine(FadeCanvasGroup(recruitMessage, recruitMessage.alpha, 0));
+            DisplayMessagePopUp("Select an area to place your new unit.");
 
             recruitment.enabled = false;
-            areaManager.SelectArea();
+            CurrentMode = Mode.RECRUIT;
         }
         
+    }
+
+    public void Attack()
+    {
+        DisplayMessagePopUp("Select an area to attack.");
+        CurrentMode = Mode.ATTACK;
+        areaManager.AllowedZones = troopManager.units
+            .Where(u => u.Character == currentCharacter)
+            .Select(u => u.Area)
+            .ToList();
+    }
+
+    public void InitiateFight(Area area, Character character)
+    {
+        Random rnd = new Random();
+        int die = rnd.Next(1, 7);
+        string message = "";
+        if (die <= troopManager.GetNumberOfUnitsInArea(area, currentCharacter))
+        {
+            message = " you win";
+            troopManager.RemoveUnit(character, area);
+        }
+        else
+        {
+            message = " you loose";
+            troopManager.RemoveUnit(currentCharacter, area);
+        }
+        DisplayMessagePopUp("You VS " + character.Name + " : " + message + " (result : " + die + ")");
+    }
+    
+    public void MoveUnits()
+    {
+        DisplayMessagePopUp("Select an area where you want your troops to move.");
+        CurrentMode = Mode.MOVE;
+    }
+    
+    public void DisplayMessagePopUp(string message)
+    {
+        popUpMessage.SetText(message);
+        recruitMessage.gameObject.SetActive(true);
+        StartCoroutine(FadeCanvasGroup(recruitMessage, recruitMessage.alpha, 0));
     }
 
     public IEnumerator FadeCanvasGroup(CanvasGroup cg, float start, float end, float lerpTime = 1)
@@ -83,7 +134,12 @@ public class GameManager : MonoBehaviour
 
             cg.alpha = currentValue;
 
-            if (percentageComplete >= 1) break;
+            if (percentageComplete >= 1)
+            {
+                cg.alpha = start;
+                recruitMessage.gameObject.SetActive(false);
+                break;
+            } 
 
             yield return new WaitForFixedUpdate();
         }

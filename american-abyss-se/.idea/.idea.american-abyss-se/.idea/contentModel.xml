@@ -23,10 +23,6 @@
             </e>
             <e p="Effects" t="Include">
               <e p="PyroParticles" t="Include">
-                <e p="Demo" t="Include">
-                  <e p="DemoScript.cs" t="Include" />
-                  <e p="DemoScriptEditor.cs" t="Include" />
-                </e>
                 <e p="Prefab" t="Include">
                   <e p="Editor" t="Include">
                     <e p="PyroParticlesEditor.cs" t="Include" />
@@ -115,6 +111,7 @@
           <e p="AreaManager.cs" t="Include" />
           <e p="Battalion.cs" t="Include" />
           <e p="Character.cs" t="Include" />
+          <e p="ChooseFactionUI.cs" t="Include" />
           <e p="ClonableSO.cs" t="Include" />
           <e p="GameManager.cs" t="Include" />
           <e p="InputManager.cs" t="Include" />
@@ -122,6 +119,7 @@
             <e p="MenuManagerUI.cs" t="Include" />
           </e>
           <e p="MenuManager.cs" t="Include" />
+          <e p="Mode.cs" t="Include" />
           <e p="SetupZone.cs" t="Include" />
           <e p="TroopsManager.cs" t="Include" />
           <e p="UI" t="Include">
