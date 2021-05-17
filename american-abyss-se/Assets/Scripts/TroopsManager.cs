@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -12,21 +13,24 @@ public class TroopsManager : MonoBehaviour
         troopsManagerUI.BuildUI(units);
     }
 
-    public void AddUnitToZone(Character character, Area area)
+    public void AddUnitToZone(Character character, Area area, int numberOfUnits = 1)
     {
         if(!units.Exists(t => t.Character.Name == character.Name && t.Area == area))
             units.Add(new Battalion(character, area));
         units
             .First(t => t.Character.Name == character.Name && t.Area == area)
-            .NumberOfUnits += 1;
+            .NumberOfUnits += numberOfUnits;
         
         troopsManagerUI.BuildUI(units);
     }
 
     public void MoveUnit(Character character, Area startingArea, Area endArea)
     {
-        units.Find(u => u.Character == character && u.Area == startingArea).NumberOfUnits -= 1;
-        units.Find(u => u.Character == character && u.Area == endArea).NumberOfUnits += 1;
+        units.Find(u => u.Character.Name == character.Name && u.Area == startingArea).NumberOfUnits -= 1;
+        
+        if(!units.Exists(b => b.Character.Name == character.Name && b.Area == endArea))
+            units.Add(new Battalion(character, endArea));
+        units.Find(u => u.Character.Name == character.Name && u.Area == endArea).NumberOfUnits += 1;
         
         troopsManagerUI.BuildUI(units);
     }
@@ -34,6 +38,12 @@ public class TroopsManager : MonoBehaviour
     public void RemoveUnit(Character character, Area area)
     {
         units.Find(u => u.Character == character && u.Area == area).NumberOfUnits -= 1;
+        troopsManagerUI.BuildUI(units);
+    }
+
+    public void RemoveAllUnitsOfCharacterFromZone(Character character, Area area)
+    {
+        units.Find(u => u.Character == character && u.Area == area).NumberOfUnits = 0;
         troopsManagerUI.BuildUI(units);
     }
 

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 [Serializable]
 public enum Mode
@@ -9,5 +6,6 @@ public enum Mode
     RECRUIT,
     ATTACK,
     MOVE,
+    MOVE_AFTER_BATTLE,
     DEFAULT
 }

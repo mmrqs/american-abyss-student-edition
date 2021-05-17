@@ -94,17 +94,30 @@ public class GameManager : MonoBehaviour
         Random rnd = new Random();
         int die = rnd.Next(1, 7);
         string message = "";
+
+        Character loosing;
         if (die <= troopManager.GetNumberOfUnitsInArea(area, currentCharacter))
         {
             message = " you win";
             troopManager.RemoveUnit(character, area);
+            areaManager.NumberOfUnits = troopManager.GetNumberOfUnitsInArea(area, character);
+            loosing = character;
         }
         else
         {
             message = " you loose";
             troopManager.RemoveUnit(currentCharacter, area);
+            areaManager.NumberOfUnits = troopManager.GetNumberOfUnitsInArea(area, currentCharacter);
+            loosing = currentCharacter;
         }
-        DisplayMessagePopUp("You VS " + character.Name + " : " + message + " (result : " + die + ")");
+        DisplayMessagePopUp("You VS " + character.Name + " : " + message + " (result : " + die + "), choose an area where to move the removing units.");
+
+        if (troopManager.GetNumberOfUnitsInArea(area, loosing) != 0)
+        {
+            areaManager.character = loosing;
+            areaManager.StartingZone = area;
+            CurrentMode = Mode.MOVE;
+        }
     }
     
     public void MoveUnits()

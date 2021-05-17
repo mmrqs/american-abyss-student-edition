@@ -18,11 +18,17 @@ public class AreaManager : MonoBehaviour
     private bool test;
 
     public List<Area> AllowedZones { get; set; }
-    public List<Character> Ennemies { get; set; }
+    public int NumberOfUnits { get; set; }
+    
+    public Area? StartingZone { get; set; }
+    public Area? EndingZone { get; set; }
+    
+    public Character character { get; set; }
 
     void Start()
     {
         cam = Camera.main;
+        init();
     }
 
     // Update is called once per frame
@@ -73,6 +79,28 @@ public class AreaManager : MonoBehaviour
                             }
                         }
                         break;
+                    case Mode.MOVE:
+                        if (current == null || !current.Equals(theObject.transform.gameObject))
+                        {
+                            if(current != null)
+                                current.transform.gameObject.GetComponent<Renderer>().material.color = currentColor;
+                            current = theObject.transform.gameObject;
+                            currentColor = current.transform.gameObject.GetComponent<Renderer>().material.color;
+                        }
+                        theObject.transform.gameObject.GetComponent<Renderer>().material.color = Color.Lerp(Color.white, Color.black, Mathf.PingPong(Time.time, 1));
+
+                            if (Input.GetMouseButton(0))
+                            {
+                                current.transform.gameObject.GetComponent<Renderer>().material.color = currentColor;
+                                if (StartingZone == null)
+                                    StartingZone = (Area)Enum.Parse(typeof(Area), current.gameObject.name);
+                                else if (StartingZone != null && EndingZone == null)
+                                    EndingZone = (Area)Enum.Parse(typeof(Area), current.gameObject.name);
+                                
+                                if(StartingZone != null && EndingZone != null)
+                                    MoveTroop();
+                            }
+                        break;
                 }
             }
         }
@@ -80,7 +108,7 @@ public class AreaManager : MonoBehaviour
 
     public void AttackArea(GameObject area)
     {
-        chooseFactionUI.AreaUnderAttack = (Area) Enum.Parse(typeof(Area), area.name);
+        chooseFactionUI.AreaUnderAttack = (Area)Enum.Parse(typeof(Area), area.name);
         chooseFactionUI.Characters = troopManager
             .GetCharactersInZone(chooseFactionUI.AreaUnderAttack)
             .Where(c => c.Name != gameManager.Character.Name)
@@ -90,7 +118,26 @@ public class AreaManager : MonoBehaviour
     
     public void PutTroopOnArea(GameObject area)
     {
-        troopManager.AddUnitToZone(gameManager.Character, (Area)Enum.Parse(typeof(Area), area.name));
+        troopManager.AddUnitToZone(gameManager.Character, (Area)Enum.Parse(typeof(Area), area.name), NumberOfUnits);
         gameManager.CurrentMode = Mode.DEFAULT;
+        init();
+    }
+
+    public void MoveTroop()
+    {
+        Debug.Log("test");
+        if (character == null)
+            character = gameManager.Character;
+        troopManager.MoveUnit(character, (Area)StartingZone, (Area) EndingZone);
+        gameManager.CurrentMode = Mode.DEFAULT;
+        init();
+    }
+
+    public void init()
+    {
+        NumberOfUnits = 1;
+        StartingZone = null;
+        EndingZone = null;
+        character = null;
     }
 }
