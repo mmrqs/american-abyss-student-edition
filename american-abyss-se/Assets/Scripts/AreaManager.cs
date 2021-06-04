@@ -31,7 +31,6 @@ public class AreaManager : MonoBehaviour
         init();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (gameManager.CurrentMode != Mode.DEFAULT)
@@ -87,7 +86,10 @@ public class AreaManager : MonoBehaviour
                             current = theObject.transform.gameObject;
                             currentColor = current.transform.gameObject.GetComponent<Renderer>().material.color;
                         }
-                        theObject.transform.gameObject.GetComponent<Renderer>().material.color = Color.Lerp(Color.white, Color.black, Mathf.PingPong(Time.time, 1));
+
+                        //if (distanceBetweenAreas(current, theObject.transform.gameObject) == 1)
+                        //{
+                            theObject.transform.gameObject.GetComponent<Renderer>().material.color = Color.Lerp(Color.white, Color.black, Mathf.PingPong(Time.time, 1));
 
                             if (Input.GetMouseButton(0))
                             {
@@ -100,10 +102,31 @@ public class AreaManager : MonoBehaviour
                                 if(StartingZone != null && EndingZone != null)
                                     MoveTroop();
                             }
+                        //}
                         break;
                 }
             }
         }
+    }
+    
+    private int distanceBetweenAreas(GameObject area1, GameObject area2)
+    {
+        Zone zone1 = area1.transform.gameObject.GetComponent<Zone>();
+        Zone zone2 = area2.transform.gameObject.GetComponent<Zone>();
+
+        int distance = 0;
+
+        List<Area> researchingAreas = zone1.Surroundings;
+        
+        while (!researchingAreas.Contains(zone2.Name)&& zone2 != null)
+        {
+            foreach (Area area in researchingAreas)
+                if(!researchingAreas.Contains(area))
+                    researchingAreas.Add(area);
+            distance++;
+        }
+
+        return distance;
     }
 
     public void AttackArea(GameObject area)
@@ -125,7 +148,6 @@ public class AreaManager : MonoBehaviour
 
     public void MoveTroop()
     {
-        Debug.Log("test");
         if (character == null)
             character = gameManager.Character;
         troopManager.MoveUnit(character, (Area)StartingZone, (Area) EndingZone);

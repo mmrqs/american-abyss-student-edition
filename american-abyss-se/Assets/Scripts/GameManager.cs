@@ -26,6 +26,8 @@ public class GameManager : MonoBehaviour
     public TMPro.TMP_Text popUpMessage;
     
     public Button recruitment;
+    public Button movingButton;
+    public Button attackingButton;
 
     private int index;
     private Character currentCharacter;
@@ -45,7 +47,7 @@ public class GameManager : MonoBehaviour
         recruitMessage.gameObject.SetActive(false);
 
         // we make the order of player random
-        System.Random rng = new System.Random();
+        Random rng = new Random();
         characters = characters.OrderBy(a => rng.Next()).ToList();
         NextTurn();
     }
@@ -61,6 +63,9 @@ public class GameManager : MonoBehaviour
         index++;
 
         CurrentMode = Mode.DEFAULT;
+
+        attackingButton.gameObject.SetActive(false);
+        movingButton.gameObject.SetActive(false);
     }
 
     public void Recruit()
@@ -76,6 +81,8 @@ public class GameManager : MonoBehaviour
             recruitment.enabled = false;
             CurrentMode = Mode.RECRUIT;
         }
+        recruitment.gameObject.SetActive(false);
+        movingButton.gameObject.SetActive(true);
         
     }
 
@@ -87,6 +94,7 @@ public class GameManager : MonoBehaviour
             .Where(u => u.Character == currentCharacter)
             .Select(u => u.Area)
             .ToList();
+        attackingButton.gameObject.SetActive(false);
     }
 
     public void InitiateFight(Area area, Character character)
@@ -124,6 +132,8 @@ public class GameManager : MonoBehaviour
     {
         DisplayMessagePopUp("Select an area where you want your troops to move.");
         CurrentMode = Mode.MOVE;
+        attackingButton.gameObject.SetActive(true);
+        movingButton.gameObject.SetActive(false);
     }
     
     public void DisplayMessagePopUp(string message)

@@ -109,6 +109,9 @@
         <e p="Scripts" t="Include">
           <e p="Area.cs" t="Include" />
           <e p="AreaManager.cs" t="Include" />
+          <e p="Areas" t="Include">
+            <e p="Zone.cs" t="Include" />
+          </e>
           <e p="Battalion.cs" t="Include" />
           <e p="Character.cs" t="Include" />
           <e p="ChooseFactionUI.cs" t="Include" />
