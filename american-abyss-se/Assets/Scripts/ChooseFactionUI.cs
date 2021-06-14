@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -14,28 +12,22 @@ public class ChooseFactionUI : MonoBehaviour
     public List<Character> Characters { get; set; }
     public Area AreaUnderAttack { get; set; }
 
-    private void Awake()
-    {
-        hide();
-    }
-
     public void show()
     {
         for (int i = 0; i < Characters.Count; i++)
             buttons[i].GetComponentInChildren<TMP_Text>().SetText(Characters[i].Name);
         for(int i = Characters.Count; i < buttons.Count; i++)
             buttons[i].gameObject.SetActive(false);
-        
         gameObject.SetActive(true);
     }
 
     public void selectFaction(TMP_Text faction)
     {
         gameManager.InitiateFight(AreaUnderAttack, Characters.First(c => c.Name.Equals(faction.text)));
-        hide();
+        Hide();
     }
 
-    public void hide()
+    public void Hide()
     {
         gameObject.SetActive(false);
     }

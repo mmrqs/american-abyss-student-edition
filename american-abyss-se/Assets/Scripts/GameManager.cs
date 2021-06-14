@@ -17,11 +17,7 @@ public class GameManager : MonoBehaviour
     public AreaManager areaManager;
 
     public TroopsManager troopManager;
-    
-    public Image imageCurrent;
-
-    public List<Image> images;
-
+    public List<Zone> zones;
     public CanvasGroup recruitMessage;
     public TMPro.TMP_Text popUpMessage;
     
@@ -34,6 +30,7 @@ public class GameManager : MonoBehaviour
     public Character Character => currentCharacter;
     
     private Mode currentMode;
+    
     public Mode CurrentMode
     {
         get => currentMode;
@@ -63,9 +60,11 @@ public class GameManager : MonoBehaviour
         index++;
 
         CurrentMode = Mode.DEFAULT;
-
+        
+        recruitment.gameObject.SetActive(true);
         attackingButton.gameObject.SetActive(false);
         movingButton.gameObject.SetActive(false);
+        areaManager.Init();
     }
 
     public void Recruit()
@@ -79,11 +78,14 @@ public class GameManager : MonoBehaviour
             DisplayMessagePopUp("Select an area to place your new unit.");
 
             recruitment.enabled = false;
+            List<Zone> zones = troopManager.GetZonesWhereCharacterHasUnits(currentCharacter);
+            if (zones.Count == 0)
+                zones = troopManager.GetAllZones();
+            areaManager.StartFlashing(zones);
             CurrentMode = Mode.RECRUIT;
         }
         recruitment.gameObject.SetActive(false);
         movingButton.gameObject.SetActive(true);
-        
     }
 
     public void Attack()
@@ -94,11 +96,16 @@ public class GameManager : MonoBehaviour
             .Where(u => u.Character == currentCharacter)
             .Select(u => u.Area)
             .ToList();
+        List<Zone> zones = troopManager.GetZonesWhereCharacterHasUnits(currentCharacter);
+        if (zones.Count == 0)
+            zones = troopManager.GetAllZones();
+        areaManager.StartFlashing(zones);
         attackingButton.gameObject.SetActive(false);
     }
 
     public void InitiateFight(Area area, Character character)
     {
+        Debug.Log(area);
         Random rnd = new Random();
         int die = rnd.Next(1, 7);
         string message = "";
@@ -118,12 +125,16 @@ public class GameManager : MonoBehaviour
             areaManager.NumberOfUnits = troopManager.GetNumberOfUnitsInArea(area, currentCharacter);
             loosing = currentCharacter;
         }
+        
         DisplayMessagePopUp("You VS " + character.Name + " : " + message + " (result : " + die + "), choose an area where to move the removing units.");
 
         if (troopManager.GetNumberOfUnitsInArea(area, loosing) != 0)
         {
             areaManager.character = loosing;
-            areaManager.StartingZone = area;
+            areaManager.ActingZones.Add(area);
+            Debug.Log(areaManager.troopManager.GetZones(areaManager.troopManager.GetZone(area).Surroundings).Count);
+            areaManager.StartFlashing(areaManager.troopManager.GetZones(areaManager.troopManager.GetZone(area).Surroundings));
+            Debug.Log("mooooovee");
             CurrentMode = Mode.MOVE;
         }
     }
@@ -132,6 +143,8 @@ public class GameManager : MonoBehaviour
     {
         DisplayMessagePopUp("Select an area where you want your troops to move.");
         CurrentMode = Mode.MOVE;
+        List<Zone> zones = troopManager.GetZonesWhereCharacterHasUnits(currentCharacter);
+        areaManager.StartFlashing(zones);
         attackingButton.gameObject.SetActive(true);
         movingButton.gameObject.SetActive(false);
     }

@@ -16,3 +16,4 @@ MonoBehaviour:
   _numberOfUnits: 6
   _background: 
   _image: {fileID: 0}
+  _movingZoneDistance: 1

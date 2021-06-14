@@ -15,4 +15,7 @@ public class Character : ScriptableObject
 
     [SerializeField] protected Image _image;
     public Image Image => _image;
+
+    [SerializeField] protected int _movingZoneDistance;
+    public int MovingZoneDistance => _movingZoneDistance;
 }

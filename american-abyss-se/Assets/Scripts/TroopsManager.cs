@@ -7,7 +7,8 @@ public class TroopsManager : MonoBehaviour
 {
     public List<Battalion> units;
     public TroopsManagerUI troopsManagerUI;
-
+    public List<Zone> zones;
+    
     private void Start()
     {
         troopsManagerUI.BuildUI(units);
@@ -57,5 +58,47 @@ public class TroopsManager : MonoBehaviour
     public int GetNumberOfUnitsInArea(Area area, Character character)
     {
         return units.Find(b => b.Character.Name == character.Name && b.Area == area).NumberOfUnits;
+    }
+
+    public List<Zone> GetZonesWhereCharacterHasUnits(Character character)
+    {
+        List<Area> areas = units.Where(b => b.Character.Name == character.Name)
+            .Select(u => u.Area)
+            .ToList();
+        return GetZones(areas);
+    }
+
+    public List<Zone> GetAllZones()
+    {
+        return zones;
+    }
+
+    public Zone GetZone(Area area)
+    {
+        return zones.First(z => z.Name == area);
+    }
+
+    public List<Zone> GetZones(List<Area> areas)
+    {
+        return zones.Where(t2 => areas.Contains(t2.Name)).ToList();
+    }
+
+    public List<Zone> GetSurroundingZonesInPerimeter(int distance, Area startingZone)
+    {
+        HashSet<Area> result = new HashSet<Area>(GetZone(startingZone).Surroundings);
+
+        
+        for (int i = 0; i < distance - 1; i++)
+        {
+            foreach (Area area in result.Reverse())
+            {
+                Debug.Log("area : " + area);
+                Debug.Log("surroundings : " + GetZone(area).Surroundings);
+                Debug.Log("result : " + result);
+                result.UnionWith(GetZone(area).Surroundings);
+            }
+        }
+
+        return GetZones(result.ToList());
     }
 }
