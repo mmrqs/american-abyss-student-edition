@@ -26,59 +26,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2ac1d6c1-2abf-476f-a85b-ce6433cf96b9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.american-abyss-se/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.american-abyss-se/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.american-abyss-se/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.american-abyss-se/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Game Objects/Characters/AgentYellow.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game Objects/Characters/AgentYellow.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Game Objects/Characters/ColonelRed.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game Objects/Characters/ColonelRed.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Game Objects/Characters/DrGreen.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game Objects/Characters/DrGreen.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Game Objects/Characters/PresidentBlue.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Game Objects/Characters/PresidentBlue.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/AreaManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/AreaManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Character.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Character.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/ChooseFactionUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/ChooseFactionUI.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/TroopsManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/TroopsManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Library/ArtifactDB" beforeDir="false" afterPath="$PROJECT_DIR$/Library/ArtifactDB" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Library/Artifacts/28/280f3d956ee25611cbbc6e4d77aedc2d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Library/Artifacts/29/298d77ed7be11ad3898c0731dc0ded53" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Library/Artifacts/3f/3fcdad37ecd6cfe94a25c05ef1e7a844" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Library/Artifacts/65/652433bd5431039be1c2a91918f06a9c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Library/Artifacts/66/66735736ba19f8a043dd4f8f62d149b5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Library/Artifacts/6c/6c4022cef0dee16e4c57bd86aa1648ab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Library/Artifacts/6e/6ea423500751c3ed7706171eab3d52b7" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Library/Artifacts/ac/acaf327ebbb6ce75f14dc3e39dc6821f" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Library/Artifacts/b9/b9cab17c80c6466a755e93282628964e" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Library/Artifacts/bc/bcbbc0619a08f2916b4a79fe39ff7707" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Library/Artifacts/ea/ead5d995cd2e3419b4651504c6f0ec2a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Library/Artifacts/fb/fb82034651f9a181438366dcd98f30f0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Library/CurrentLayout-default.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/Library/CurrentLayout-default.dwlt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Library/EditorInstance.json" beforeDir="false" afterPath="$PROJECT_DIR$/Library/EditorInstance.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Library/InspectorExpandedItems.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Library/InspectorExpandedItems.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Library/ProtocolInstance.json" beforeDir="false" afterPath="$PROJECT_DIR$/Library/ProtocolInstance.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Library/SceneVisibilityState.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Library/SceneVisibilityState.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Library/ScriptAssemblies/Assembly-CSharp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Library/ScriptAssemblies/Assembly-CSharp.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Library/SourceAssetDB" beforeDir="false" afterPath="$PROJECT_DIR$/Library/SourceAssetDB" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Library/StateCache/Hierarchy/4c969a-mainStage.json" beforeDir="false" afterPath="$PROJECT_DIR$/Library/StateCache/Hierarchy/4c969a-mainStage.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Library/StateCache/SceneView/cc2798-mainStage.json" beforeDir="false" afterPath="$PROJECT_DIR$/Library/StateCache/SceneView/cc2798-mainStage.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Temp/UnityTempFile-037ce879134b045c5bc9cce0d7e25ef9" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Temp/UnityTempFile-10c4bf611d82043df91ce126e42ce249" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Temp/UnityTempFile-120dbb6efaa3c4bd6ad01e420e97fef7" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Temp/UnityTempFile-34cbdd08f4c9d4953aacab0cd8c2b50f" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Temp/UnityTempFile-46e2db17b6a114e59be6bdac6432b640" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Temp/UnityTempFile-59daadcb919a84f7f8bd4d0ef7a41fad" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Temp/UnityTempFile-5f01b2cb73c52454c8eebca5660539c3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Temp/UnityTempFile-642eb89e24faf41869db103e0b6f4591" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Temp/UnityTempFile-770458ba5c9fe4e6882247be362b418e" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Temp/UnityTempFile-7bc67ac2f968f4950b17103f30bf9088" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Temp/UnityTempFile-a5cd6953e9f1a4d6fa624f0509a6a6d4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Temp/UnityTempFile-b3337e6b3bbdc4756a120178357d607a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Temp/UnityTempFile-c19771851b8304a2e80a6cd9c6ebec8c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Temp/UnityTempFile-c3afe20f3599744e3a77fb702b6ba1fe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Temp/UnityTempFile-e7f48aaa424a04640a6e9a406088b2d0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Temp/UnityTempFile-ef7f37cc5343b4d4182bd6f876836b09" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Temp/__Backupscenes/0.backup" beforeDir="false" afterPath="$PROJECT_DIR$/Temp/__Backupscenes/0.backup" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,10 +73,10 @@
         <option value="$PROJECT_DIR$/Assets/Scripts/Areas/test.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Areas/Zone.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/ColorsZone.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/ChooseFactionUI.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/Character.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/AreaManager.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Character.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/TroopsManager.cs" />
       </list>
     </option>
@@ -178,7 +140,7 @@
       <workItem from="1622570408433" duration="1723000" />
       <workItem from="1622805793290" duration="3607000" />
       <workItem from="1623333683926" duration="21706000" />
-      <workItem from="1623597262236" duration="6779000" />
+      <workItem from="1623597262236" duration="7609000" />
     </task>
     <servers />
   </component>

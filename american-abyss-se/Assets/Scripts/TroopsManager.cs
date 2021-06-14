@@ -38,7 +38,8 @@ public class TroopsManager : MonoBehaviour
 
     public void RemoveUnit(Character character, Area area)
     {
-        units.Find(u => u.Character == character && u.Area == area).NumberOfUnits -= 1;
+        if(units.Find(u => u.Character == character && u.Area == area).NumberOfUnits > 0)
+            units.Find(u => u.Character == character && u.Area == area).NumberOfUnits -= 1;
         troopsManagerUI.BuildUI(units);
     }
 

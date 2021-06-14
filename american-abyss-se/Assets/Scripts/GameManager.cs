@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = System.Object;
 using Random = System.Random;
 
 public class GameManager : MonoBehaviour
@@ -115,6 +116,8 @@ public class GameManager : MonoBehaviour
         {
             message = " you win";
             troopManager.RemoveUnit(character, area);
+            for(int i = 0; i < currentCharacter.NumberOfTroopsDestroyed; i++)
+                troopManager.RemoveUnit(character, area);
             areaManager.NumberOfUnits = troopManager.GetNumberOfUnitsInArea(area, character);
             loosing = character;
         }

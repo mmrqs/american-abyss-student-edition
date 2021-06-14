@@ -18,4 +18,7 @@ public class Character : ScriptableObject
 
     [SerializeField] protected int _movingZoneDistance;
     public int MovingZoneDistance => _movingZoneDistance;
+    
+    [SerializeField] protected int _numberOfTroopsDestroyed;
+    public int NumberOfTroopsDestroyed => _numberOfTroopsDestroyed;
 }

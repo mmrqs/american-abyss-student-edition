@@ -17,3 +17,4 @@ MonoBehaviour:
   _background: 
   _image: {fileID: 0}
   _movingZoneDistance: 2
+  _numberOfTroopsDestroyed: 2
