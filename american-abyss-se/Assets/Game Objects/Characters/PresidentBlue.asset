@@ -18,3 +18,5 @@ MonoBehaviour:
   _image: {fileID: 0}
   _movingZoneDistance: 2
   _numberOfTroopsDestroyed: 2
+  _nbOfTerritoriesToControl: 4
+  _amountOfMoneyToHave: 0

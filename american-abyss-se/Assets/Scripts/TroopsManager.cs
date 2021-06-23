@@ -88,18 +88,45 @@ public class TroopsManager : MonoBehaviour
     {
         HashSet<Area> result = new HashSet<Area>(GetZone(startingZone).Surroundings);
 
-        
         for (int i = 0; i < distance - 1; i++)
-        {
             foreach (Area area in result.Reverse())
-            {
-                Debug.Log("area : " + area);
-                Debug.Log("surroundings : " + GetZone(area).Surroundings);
-                Debug.Log("result : " + result);
                 result.UnionWith(GetZone(area).Surroundings);
-            }
-        }
 
         return GetZones(result.ToList());
+    }
+
+    public int GetTotalNumberOfUnitsInField(Character character)
+    {
+        return units
+            .Where(b => b.Character.Name == character.Name)
+            .Sum(b => b.NumberOfUnits); 
+    }
+
+    public List<Battalion> GetZoneMasters()
+    {
+        var result = new List<Battalion>();
+        foreach (var battalion in units)
+        {
+            Battalion concurrent = result.Find(b => battalion.Area == b.Area);
+            
+            if(concurrent == null && battalion.NumberOfUnits > 0)
+                result.Add(battalion);
+            else if (concurrent != null && concurrent.NumberOfUnits < battalion.NumberOfUnits)
+            {
+                result.Remove(concurrent);
+                result.Add(battalion);
+            }
+            else if(concurrent != null && concurrent.NumberOfUnits == battalion.NumberOfUnits)
+                result.Remove(concurrent);
+        }
+        return result;
+    }
+    
+    
+    public int GetTotalControlledZones(Character character)
+    {
+        return GetZoneMasters()
+            .FindAll(b => b.Character.Name.Equals(character.Name))
+            .Count;
     }
 }

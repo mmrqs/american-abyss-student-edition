@@ -70,9 +70,7 @@ public class GameManager : MonoBehaviour
 
     public void Recruit()
     {
-        int numberOfUnits = areaManager.troopManager.units
-            .Where(b => b.Character.Name == currentCharacter.Name)
-            .Sum(b => b.NumberOfUnits);
+        int numberOfUnits = troopManager.GetTotalNumberOfUnitsInField(Character);
         
         if (currentCharacter.NumberOfUnits > numberOfUnits)
         {

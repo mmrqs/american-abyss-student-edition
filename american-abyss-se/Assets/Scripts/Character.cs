@@ -21,4 +21,11 @@ public class Character : ScriptableObject
     
     [SerializeField] protected int _numberOfTroopsDestroyed;
     public int NumberOfTroopsDestroyed => _numberOfTroopsDestroyed;
+    
+    // victory conditions
+    [SerializeField] protected int _nbOfTerritoriesToControl;
+    public int NbOfTerritoriesToControl => _nbOfTerritoriesToControl;
+    
+    [SerializeField] protected int _amountOfMoneyToHave;
+    public int AmountOfMoneyToHave => _amountOfMoneyToHave;
 }
