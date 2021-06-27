@@ -36,6 +36,8 @@ public class GameManager : MonoBehaviour
         set => currentMode = value;
     }
 
+    public FightingPopUpUI fightingPopUpUI;
+
     public WinningUI winningUI;
 
     void Start()
@@ -131,7 +133,8 @@ public class GameManager : MonoBehaviour
             loosing = currentCharacter;
         }
         
-        DisplayMessagePopUp("You VS " + character.Name + " : " + message + " (result : " + die + "), choose an area where to move the removing units.");
+        fightingPopUpUI.BuildUI(currentCharacter.Name, character.Name, die, loosing.Name, currentCharacter.NumberOfTroopsDestroyed);
+        //DisplayMessagePopUp("You VS " + character.Name + " : " + message + " (result : " + die + "), choose an area where to move the removing units.");
 
         if (troopManager.GetNumberOfUnitsInArea(area, loosing) != 0)
         {

@@ -1954,7 +1954,8 @@ MonoBehaviour:
   recruitment: {fileID: 109617132}
   movingButton: {fileID: 1232680783}
   attackingButton: {fileID: 458128814}
-  winningUI: {fileID: 0}
+  fightingPopUpUI: {fileID: 655009275}
+  winningUI: {fileID: 185747091}
 --- !u!114 &122936454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3235,7 +3236,7 @@ RectTransform:
   m_GameObject: {fileID: 300722711}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.308241, y: 1.7625, z: 1}
+  m_LocalScale: {x: 0.20998918, y: 1.0906123, z: 1}
   m_Children:
   - {fileID: 1003179752}
   m_Father: {fileID: 655009271}
@@ -3288,7 +3289,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 300722714}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 655009275}
+        m_MethodName: Hide
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &300722714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3308,8 +3320,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 7f756791aa6b84741a2fecba9027765a, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -6405,6 +6417,7 @@ GameObject:
   - component: {fileID: 655009274}
   - component: {fileID: 655009273}
   - component: {fileID: 655009272}
+  - component: {fileID: 655009275}
   m_Layer: 5
   m_Name: FightingPopUp
   m_TagString: Untagged
@@ -6510,6 +6523,23 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &655009275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 655009270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16e4ef8aa56fb41cca512efd9c2f9814, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player1Text: {fileID: 1635089578}
+  player2Text: {fileID: 456803159}
+  scoreText: {fileID: 198925209}
+  winnerText: {fileID: 71487168}
+  troopsDestroyedText: {fileID: 1384164066}
 --- !u!1 &656603346
 GameObject:
   m_ObjectHideFlags: 0
