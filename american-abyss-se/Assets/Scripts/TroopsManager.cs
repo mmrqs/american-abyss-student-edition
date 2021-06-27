@@ -91,7 +91,7 @@ public class TroopsManager : MonoBehaviour
         for (int i = 0; i < distance - 1; i++)
             foreach (Area area in result.Reverse())
                 result.UnionWith(GetZone(area).Surroundings);
-
+        result.Remove(startingZone);
         return GetZones(result.ToList());
     }
 
@@ -120,6 +120,22 @@ public class TroopsManager : MonoBehaviour
                 result.Remove(concurrent);
         }
         return result;
+    }
+
+    public Character GetMaster(Zone zone)
+    {
+        Battalion result = null;
+        
+        foreach (var battalion in units.FindAll(b => b.Area == zone.Name))
+        {
+            if(result == null && battalion.NumberOfUnits > 0)
+                result = battalion;
+            else if (result != null && result.NumberOfUnits < battalion.NumberOfUnits)
+                result = battalion;
+            else if(result != null && result.NumberOfUnits == battalion.NumberOfUnits)
+                result = null;
+        }
+        return result?.Character;
     }
     
     

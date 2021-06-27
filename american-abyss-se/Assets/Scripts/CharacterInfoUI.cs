@@ -66,27 +66,7 @@ public class CharacterInfoUI : MonoBehaviour
 
     private void SetVictoryConditions()
     {
-        float percentage = 0;
-        
-        switch (gameManager.Character.Name)
-        {
-            case "Agent Yellow":
-                percentage = (troopsManager.GetTotalNumberOfUnitsInField(gameManager.Character)
-                              / (float)troopsManager.GetTotalNumberOfUnitsInField(
-                                  gameManager.characters.Find(c => c.Name == "Colonel Red"))) * 100;
-                break;
-            case "Colonel Red":
-                percentage = ((troopsManager.GetTotalControlledZones(gameManager.Character) +
-                               troopsManager.GetTotalNumberOfUnitsInField(gameManager.Character)) / (float)gameManager.Character.NbOfTerritoriesToControl) * 100;
-                break;
-            case "Dr. Green":
-                percentage = ((15 - gameManager.Character.AmountOfMoneyToHave) / 30) * 100 + ((troopsManager.GetTotalControlledZones(gameManager.Character) +
-                    troopsManager.GetTotalNumberOfUnitsInField(gameManager.Character)) / (float)gameManager.Character.NbOfTerritoriesToControl) * 100 / 2;
-                break;
-            case " President Blue":
-                percentage = (troopsManager.GetTotalControlledZones(gameManager.Character) / (float)gameManager.Character.NbOfTerritoriesToControl) * 100;
-                break;
-        }
+        var percentage = gameManager.GetVictoryPercentage(gameManager.Character);
         victoryPercentage.SetText(percentage.ToString("0.00") + " %");
         victoryTracker.value = percentage / 100;
     }

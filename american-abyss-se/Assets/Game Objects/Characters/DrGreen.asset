@@ -20,3 +20,5 @@ MonoBehaviour:
   _numberOfTroopsDestroyed: 1
   _nbOfTerritoriesToControl: 4
   _amountOfMoneyToHave: 15
+  color: {r: 0.08235294, g: 0.6784314, b: 0.23137257, a: 0}
+  aim: expand your criminal empire and make millions of dollars.

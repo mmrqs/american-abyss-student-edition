@@ -20,3 +20,5 @@ MonoBehaviour:
   _numberOfTroopsDestroyed: 1
   _nbOfTerritoriesToControl: 8
   _amountOfMoneyToHave: 0
+  color: {r: 0.7725491, g: 0.039215688, b: 0.043137256, a: 0}
+  aim: "save America\u2019s democracy."

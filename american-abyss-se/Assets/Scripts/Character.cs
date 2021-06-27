@@ -27,5 +27,15 @@ public class Character : ScriptableObject
     public int NbOfTerritoriesToControl => _nbOfTerritoriesToControl;
     
     [SerializeField] protected int _amountOfMoneyToHave;
-    public int AmountOfMoneyToHave => _amountOfMoneyToHave;
+    public int AmountOfMoneyToHave
+    {
+        get => _amountOfMoneyToHave;
+        set => _amountOfMoneyToHave = value;
+    }
+
+    [SerializeField] protected Color color;
+    public Color Color => color;
+
+    [SerializeField] protected string aim;
+    public string Aim => aim;
 }

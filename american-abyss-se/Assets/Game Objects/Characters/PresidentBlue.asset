@@ -20,3 +20,5 @@ MonoBehaviour:
   _numberOfTroopsDestroyed: 2
   _nbOfTerritoriesToControl: 4
   _amountOfMoneyToHave: 0
+  color: {r: 0.26666668, g: 0.61960787, b: 0.9607844, a: 0}
+  aim: save the government and keep control of America.

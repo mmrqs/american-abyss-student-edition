@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using Object = System.Object;
 using Random = System.Random;
 
 public class GameManager : MonoBehaviour
@@ -18,7 +17,6 @@ public class GameManager : MonoBehaviour
     public AreaManager areaManager;
 
     public TroopsManager troopManager;
-    public List<Zone> zones;
     public CanvasGroup recruitMessage;
     public TMPro.TMP_Text popUpMessage;
     
@@ -38,6 +36,8 @@ public class GameManager : MonoBehaviour
         set => currentMode = value;
     }
 
+    public WinningUI winningUI;
+
     void Start()
     {
         if (characters == null)
@@ -56,6 +56,9 @@ public class GameManager : MonoBehaviour
             index = 0;
 
         currentCharacter = characters[index];
+        if (currentCharacter.Name == "Dr. Green")
+            currentCharacter.AmountOfMoneyToHave -= troopManager.GetTotalNumberOfUnitsInField(currentCharacter);
+        
         characterName.SetText(currentCharacter.Name);
         recruitment.enabled = true;
         index++;
@@ -65,6 +68,7 @@ public class GameManager : MonoBehaviour
         recruitment.gameObject.SetActive(true);
         attackingButton.gameObject.SetActive(false);
         movingButton.gameObject.SetActive(false);
+        CheckEndGame();
         areaManager.Init();
     }
 
@@ -114,7 +118,7 @@ public class GameManager : MonoBehaviour
         {
             message = " you win";
             troopManager.RemoveUnit(character, area);
-            for(int i = 0; i < currentCharacter.NumberOfTroopsDestroyed; i++)
+            for(var i = 0; i < currentCharacter.NumberOfTroopsDestroyed; i++)
                 troopManager.RemoveUnit(character, area);
             areaManager.NumberOfUnits = troopManager.GetNumberOfUnitsInArea(area, character);
             loosing = character;
@@ -133,9 +137,7 @@ public class GameManager : MonoBehaviour
         {
             areaManager.character = loosing;
             areaManager.ActingZones.Add(area);
-            Debug.Log(areaManager.troopManager.GetZones(areaManager.troopManager.GetZone(area).Surroundings).Count);
             areaManager.StartFlashing(areaManager.troopManager.GetZones(areaManager.troopManager.GetZone(area).Surroundings));
-            Debug.Log("mooooovee");
             CurrentMode = Mode.MOVE;
         }
     }
@@ -180,5 +182,38 @@ public class GameManager : MonoBehaviour
 
             yield return new WaitForFixedUpdate();
         }
+    }
+
+    public void CheckEndGame()
+    {
+        List<Character> winners = characters.Where(character => GetVictoryPercentage(character) >= 100).ToList();
+        if(winners.Count != 0)
+            winningUI.BuildUI(winners);
+    }
+    
+    public float GetVictoryPercentage(Character character)
+    {
+        float percentage = 0;
+        
+        switch (character.Name)
+        {
+            case "Agent Yellow":
+                percentage = (troopManager.GetTotalNumberOfUnitsInField(character)
+                              / (float)troopManager.GetTotalNumberOfUnitsInField(
+                                  characters.Find(c => c.Name == "Colonel Red"))) * 100;
+                break;
+            case "Colonel Red":
+                percentage = ((troopManager.GetTotalControlledZones(character) +
+                               troopManager.GetTotalNumberOfUnitsInField(character)) / (float)character.NbOfTerritoriesToControl) * 100;
+                break;
+            case "Dr. Green":
+                percentage = ((15 - character.AmountOfMoneyToHave) / 30) * 100 + ((troopManager.GetTotalControlledZones(character) +
+                    troopManager.GetTotalNumberOfUnitsInField(character)) / (float)character.NbOfTerritoriesToControl) * 100 / 2;
+                break;
+            case " President Blue":
+                percentage = (troopManager.GetTotalControlledZones(character) / (float)character.NbOfTerritoriesToControl) * 100;
+                break;
+        }
+        return percentage;
     }
 }

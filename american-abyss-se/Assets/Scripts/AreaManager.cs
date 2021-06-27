@@ -100,10 +100,12 @@ public class AreaManager : MonoBehaviour
 
     private void ResetColors()
     {
-        List<Zone> zones = troopManager.GetAllZones();
-        foreach (Zone zone in zones)
+        var zones = troopManager.GetAllZones();
+        foreach (var zone in zones)
         {
-            zone.gameObject.GetComponent<Renderer>().material.color = ColorsZones.Find(c => c.Zone.Name == zone.Name).Color;
+            var ca = troopManager.GetMaster(zone);
+            zone.gameObject.GetComponent<Renderer>().material.color 
+                = ca == null ? Color.grey : ca.Color;
         }
     }
 

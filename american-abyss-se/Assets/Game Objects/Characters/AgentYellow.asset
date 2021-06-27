@@ -20,3 +20,5 @@ MonoBehaviour:
   _numberOfTroopsDestroyed: 1
   _nbOfTerritoriesToControl: 0
   _amountOfMoneyToHave: 0
+  color: {r: 0.9607844, g: 0.9607844, b: 0.31764707, a: 0}
+  aim: stop the Reds and save American democracy.

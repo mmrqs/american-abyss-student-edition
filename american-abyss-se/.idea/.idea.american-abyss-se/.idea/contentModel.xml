@@ -118,6 +118,7 @@
           <e p="ChooseFactionUI.cs" t="Include" />
           <e p="ClonableSO.cs" t="Include" />
           <e p="ColorsZone.cs" t="Include" />
+          <e p="FightingPopUpUI.cs" t="Include" />
           <e p="GameManager.cs" t="Include" />
           <e p="InputManager.cs" t="Include" />
           <e p="Menu" t="Include">
@@ -131,6 +132,7 @@
             <e p="TroopsManagerUI.cs" t="Include" />
             <e p="ZoneScoreUI.cs" t="Include" />
           </e>
+          <e p="WinningUI.cs" t="Include" />
         </e>
       </e>
       <e p="obj" t="ExcludeRecursive" />
