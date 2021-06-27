@@ -26,14 +26,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2ac1d6c1-2abf-476f-a85b-ce6433cf96b9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.american-abyss-se/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.american-abyss-se/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/FightingPopUpUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/FightingPopUpUI.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Library/ArtifactDB" beforeDir="false" afterPath="$PROJECT_DIR$/Library/ArtifactDB" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Library/ProtocolInstance.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Library/ScriptAssemblies/Assembly-CSharp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Library/ScriptAssemblies/Assembly-CSharp.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Library/ScriptAssemblies/BuiltinAssemblies.stamp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Library/SourceAssetDB" beforeDir="false" afterPath="$PROJECT_DIR$/Library/SourceAssetDB" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -76,8 +68,8 @@
         <option value="$PROJECT_DIR$/Assets/Scripts/Character.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/WinningUI.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/TroopsManager.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/FightingPopUpUI.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/FightingPopUpUI.cs" />
       </list>
     </option>
   </component>
@@ -145,7 +137,7 @@
       <workItem from="1623942354297" duration="11572000" />
       <workItem from="1624299973203" duration="1145000" />
       <workItem from="1624371430381" duration="6630000" />
-      <workItem from="1624630286042" duration="8390000" />
+      <workItem from="1624630286042" duration="8611000" />
     </task>
     <servers />
   </component>
