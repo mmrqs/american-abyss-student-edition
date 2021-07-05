@@ -26,7 +26,7 @@ public class AreaManager : MonoBehaviour
     public Character character { get; set; }
 
     private bool choosen;
-    public List<ColorsZone> ColorsZones;
+    public List<Zone> ColorsZones;
 
     private Coroutine flashing;
 
@@ -38,11 +38,7 @@ public class AreaManager : MonoBehaviour
 
     private Coroutine flashing2;
 
-    public Coroutine Flashing2
-    {
-        get => flashing2;
-        set => flashing2 = value;
-    }
+    public MovingTroopsNumberUI movingTroopsUI;
 
     void Start()
     {
@@ -57,7 +53,7 @@ public class AreaManager : MonoBehaviour
             Ray camRay = cam.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(camRay, out theObject))
             {
-                if (Input.GetMouseButton(0))
+                if (Input.GetMouseButton(0) && ColorsZones.Contains(troopManager.GetZone((Area) Enum.Parse(typeof(Area), theObject.transform.gameObject.name))))
                 {
                     ActingZones.Add((Area) Enum.Parse(typeof(Area), theObject.transform.gameObject.name));
                     choosen = true;
@@ -75,6 +71,8 @@ public class AreaManager : MonoBehaviour
                         gameManager.DisplayMessagePopUp("Choose a zone to move your unit");
                         flashing2 = StartCoroutine(LightZones(troopManager
                             .GetSurroundingZonesInPerimeter(gameManager.Character.MovingZoneDistance, ActingZones[0])));
+                        
+                        movingTroopsUI.BuildUI(Input.mousePosition, troopManager.GetTotalNumberOfUnitsInField(gameManager.Character));
                     }
                     if(gameManager.CurrentMode == Mode.MOVE && ActingZones.Count == 2)
                         MoveTroop(ActingZones[0], ActingZones[1]);
@@ -86,6 +84,7 @@ public class AreaManager : MonoBehaviour
 
     private IEnumerator LightZones(List<Zone> zones)
     {
+        ColorsZones = zones;
         // we change the color
         while (!choosen)
         {
@@ -130,8 +129,9 @@ public class AreaManager : MonoBehaviour
     {
         if (character == null)
             character = gameManager.Character;
-        troopManager.MoveUnit(character, startingZone, endingZone);
+        troopManager.MoveUnit(character, startingZone, endingZone, movingTroopsUI.Number);
         StopCoroutine(flashing2);
+        movingTroopsUI.Init();
         Init();
     }
 
@@ -152,6 +152,7 @@ public class AreaManager : MonoBehaviour
     public void Init()
     {
         StopFlashing();
+        ColorsZones = new List<Zone>();
         NumberOfUnits = 1;
         ActingZones = new List<Area>();
         character = null;

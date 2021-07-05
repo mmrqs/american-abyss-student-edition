@@ -25,13 +25,13 @@ public class TroopsManager : MonoBehaviour
         troopsManagerUI.BuildUI(units);
     }
 
-    public void MoveUnit(Character character, Area startingArea, Area endArea)
+    public void MoveUnit(Character character, Area startingArea, Area endArea, int numberOfUnitsToMove)
     {
-        units.Find(u => u.Character.Name == character.Name && u.Area == startingArea).NumberOfUnits -= 1;
+        units.Find(u => u.Character.Name == character.Name && u.Area == startingArea).NumberOfUnits -= numberOfUnitsToMove;
         
         if(!units.Exists(b => b.Character.Name == character.Name && b.Area == endArea))
             units.Add(new Battalion(character, endArea));
-        units.Find(u => u.Character.Name == character.Name && u.Area == endArea).NumberOfUnits += 1;
+        units.Find(u => u.Character.Name == character.Name && u.Area == endArea).NumberOfUnits += numberOfUnitsToMove;
         
         troopsManagerUI.BuildUI(units);
     }

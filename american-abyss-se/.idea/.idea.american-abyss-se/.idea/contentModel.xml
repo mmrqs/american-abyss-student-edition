@@ -126,6 +126,7 @@
           </e>
           <e p="MenuManager.cs" t="Include" />
           <e p="Mode.cs" t="Include" />
+          <e p="MovingTroopsNumberUI.cs" t="Include" />
           <e p="SetupZone.cs" t="Include" />
           <e p="TroopsManager.cs" t="Include" />
           <e p="UI" t="Include">

@@ -98,13 +98,13 @@ public class GameManager : MonoBehaviour
         DisplayMessagePopUp("Select an area to attack.");
         CurrentMode = Mode.ATTACK;
         areaManager.AllowedZones = troopManager.units
-            .Where(u => u.Character == currentCharacter)
+            .Where(u => u.Character == currentCharacter && troopManager.GetCharactersInZone(u.Area).Count > 1)
             .Select(u => u.Area)
             .ToList();
         List<Zone> zones = troopManager.GetZonesWhereCharacterHasUnits(currentCharacter);
-        if (zones.Count == 0)
-            zones = troopManager.GetAllZones();
-        areaManager.StartFlashing(zones);
+        zones = zones.Where(z => troopManager.GetCharactersInZone(z.Name).Count > 1).ToList();
+        if (zones.Count != 0)
+            areaManager.StartFlashing(zones);
         attackingButton.gameObject.SetActive(false);
     }
 
@@ -118,7 +118,6 @@ public class GameManager : MonoBehaviour
         Character loosing;
         if (die <= troopManager.GetNumberOfUnitsInArea(area, currentCharacter))
         {
-            message = " you win";
             troopManager.RemoveUnit(character, area);
             for(var i = 0; i < currentCharacter.NumberOfTroopsDestroyed; i++)
                 troopManager.RemoveUnit(character, area);
@@ -127,14 +126,12 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            message = " you loose";
             troopManager.RemoveUnit(currentCharacter, area);
             areaManager.NumberOfUnits = troopManager.GetNumberOfUnitsInArea(area, currentCharacter);
             loosing = currentCharacter;
         }
         
         fightingPopUpUI.BuildUI(currentCharacter.Name, character.Name, die, loosing.Name, currentCharacter.NumberOfTroopsDestroyed);
-        //DisplayMessagePopUp("You VS " + character.Name + " : " + message + " (result : " + die + "), choose an area where to move the removing units.");
 
         if (troopManager.GetNumberOfUnitsInArea(area, loosing) != 0)
         {
