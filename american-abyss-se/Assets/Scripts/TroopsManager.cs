@@ -6,6 +6,7 @@ using UnityEngine;
 public class TroopsManager : MonoBehaviour
 {
     public List<Battalion> units;
+    public List<Battalion> Units => units;
     public TroopsManagerUI troopsManagerUI;
     public List<Zone> zones;
     

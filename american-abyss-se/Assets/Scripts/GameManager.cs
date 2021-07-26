@@ -50,6 +50,11 @@ public class GameManager : MonoBehaviour
         Random rng = new Random();
         characters = characters.OrderBy(a => rng.Next()).ToList();
         NextTurn();
+        
+        List<Battalion> boardCopy = troopManager.Units.Select(x=> x.Clone()).ToList();
+        List<Battalion> newList = troopManager.Units.GetRange(0, troopManager.Units.Count);
+        AI ai = new AI();
+        ai.test(Character, boardCopy, characters);
     }
     
     public void NextTurn()
@@ -118,7 +123,7 @@ public class GameManager : MonoBehaviour
         Character loosing;
         if (die <= troopManager.GetNumberOfUnitsInArea(area, currentCharacter))
         {
-            troopManager.RemoveUnit(character, area);
+            //troopManager.RemoveUnit(character, area);
             for(var i = 0; i < currentCharacter.NumberOfTroopsDestroyed; i++)
                 troopManager.RemoveUnit(character, area);
             areaManager.NumberOfUnits = troopManager.GetNumberOfUnitsInArea(area, character);
