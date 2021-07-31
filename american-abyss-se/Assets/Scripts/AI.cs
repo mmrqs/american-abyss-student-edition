@@ -7,13 +7,13 @@ using Debug = UnityEngine.Debug;
 
 public class Transition
 {
-    public List<Battalion> board;
+    public Board board;
     public float proba;
 
-    public Transition(List<Battalion> _board, float _proba)
+    public Transition(Board _board, float _proba)
     {
-        this.board = _board;
-        this.proba = _proba;
+        board = _board;
+        proba = _proba;
     }
 }
 public class Action
@@ -23,89 +23,91 @@ public class Action
     public (Area, Character) fightingZone;
     public List<Transition> transitions;
     public Character character;
+    
+    // recrute une unité sur une zone spécifique
     public void Recruit(Area area)
     {
-        foreach (Transition transition in transitions)
-        {
-            if(!transition.board.Exists(t => t.Character.Name == character.Name && t.Area == area))
-                transition.board.Add(new Battalion(character, area));
-            transition.board.First(t => t.Character.Name == character.Name && t.Area == area).NumberOfUnits += 1;
-            recruitingZone = area;
-        }
-    }
+        if(!transitions[0].board.UsZone[area].Characters.ContainsKey(character))
+            transitions[0].board.UsZone[area].Characters.Add(character, 0);
 
+        transitions[0].board.UsZone[area].Characters[character] += 1;
+        recruitingZone = area;
+    }
+    
+    // bouge une ou plusieurs unités
     public void Move(Area startingArea, Area endArea, int numberOfUnitsToMove)
     {
-        foreach (Transition transition in transitions)
-        {
-            transition.board.Find(u => u.Character.Name == character.Name && u.Area == startingArea).NumberOfUnits -= numberOfUnitsToMove;
+        transitions[0].board.UsZone[startingArea].Characters[character] -= numberOfUnitsToMove;
+            
+        if (transitions[0].board.UsZone[startingArea].Characters[character] <= 0)
+            transitions[0].board.UsZone[startingArea].Characters.Remove(character);
 
-            if(transition.board.Find(u => u.Character.Name == character.Name && u.Area == startingArea).NumberOfUnits == 0) 
-                transition.board.Remove(transition.board.Find(b => b.Character.Name == character.Name && b.Area == startingArea));
-
-            if (!transition.board.Exists(b => b.Character.Name == character.Name && b.Area == endArea))
-                transition.board.Add(new Battalion(character, endArea));
-
-            transition.board.Find(u => u.Character.Name == character.Name && u.Area == endArea).NumberOfUnits += numberOfUnitsToMove;
-        }
+        
+        if(!transitions[0].board.UsZone[endArea].Characters.ContainsKey(character))
+            transitions[0].board.UsZone[endArea].Characters.Add(character, 0);
+            
+        transitions[0].board.UsZone[endArea].Characters[character] += numberOfUnitsToMove;
     }
-
+    
+    // combat une unité
     public void Fight(float chanceToWin, Area movingZone)
     {
         Character adverser = fightingZone.Item2;
         Area zone = fightingZone.Item1;
         
-        //chanceToOccur = percentage;
         fightingZone = (zone, adverser);
         
+        // créée un état gagnant et un état perdant
         List<Transition> newTransitions = new List<Transition>();
         
-        foreach (Transition transition in this.transitions)
+        foreach (Transition transition in transitions)
         {
-            
-            Transition winningTransition = new Transition(transition.board.Select(x => x.Clone()).ToList(), chanceToWin);
-            
-            for (var i = 0; i < character.NumberOfTroopsDestroyed; i++)
-                if (winningTransition.board.Find(u => u.Character.Name == adverser.Name && u.Area == zone).NumberOfUnits > 0)
-                    winningTransition.board.Find(u => u.Character.Name == adverser.Name && u.Area == zone).NumberOfUnits -= 1;
-            
-            int nb = winningTransition.board.Find(b => b.Character.Name == adverser.Name && b.Area == zone).NumberOfUnits;
-            if (nb > 0)
-            {
-                if (!winningTransition.board.Exists(b => b.Character.Name == adverser.Name && b.Area == movingZone))
-                    winningTransition.board.Add(new Battalion(adverser, movingZone));
-
-                winningTransition.board.Find(u => u.Character.Name == adverser.Name && u.Area == movingZone).NumberOfUnits += nb;
-            }
-            winningTransition.board.Remove(winningTransition.board.Find(b => b.Character.Name == adverser.Name && b.Area == zone));
-
+            Transition winningTransition = new Transition(new Board(transition.board.UsZone), chanceToWin);
             Transition loosingTransition = new Transition(transition.board, 1 - chanceToWin);
 
-            for(var j = 0; j < adverser.NumberOfTroopsDestroyed; j++)
-                if(loosingTransition.board.Find(u => u.Character.Name == character.Name && u.Area == zone).NumberOfUnits > 0)
-                    loosingTransition.board.Find(u => u.Character.Name == character.Name && u.Area == zone).NumberOfUnits -= 1;
+            for (var i = 0; i < character.NumberOfTroopsDestroyed; i++)
+                if (winningTransition.board.UsZone[zone].Characters[adverser] > 0)
+                    winningTransition.board.UsZone[zone].Characters[adverser] -= 1;
+
+            int nb = winningTransition.board.UsZone[zone].Characters[adverser];
             
-            nb = loosingTransition.board.Find(b => b.Character.Name == character.Name && b.Area == zone).NumberOfUnits;
+            if (nb > 0)
+            {
+                if (!winningTransition.board.UsZone[movingZone].Characters.ContainsKey(adverser))
+                    winningTransition.board.UsZone[movingZone].Characters.Add(adverser, 0);
+
+                winningTransition.board.UsZone[movingZone].Characters[adverser] += nb;
+            }
+
+            winningTransition.board.UsZone[zone].Characters.Remove(adverser);
             
+            // détruit unités
+            if (loosingTransition.board.UsZone[zone].Characters[character] > 0)
+                loosingTransition.board.UsZone[zone].Characters[character] -= 1;
+         
+            nb = loosingTransition.board.UsZone[zone].Characters[character];
+            
+            // s'il reste des unités on les bouge
             if (nb != 0)
             {
-                if(!loosingTransition.board.Exists(b => b.Character.Name == character.Name && b.Area == movingZone))
-                    loosingTransition.board.Add(new Battalion(character, movingZone));
-                loosingTransition.board.Find(u => u.Character.Name == character.Name && u.Area == movingZone).NumberOfUnits += nb;
+                if (!loosingTransition.board.UsZone[movingZone].Characters.ContainsKey(character))
+                    loosingTransition.board.UsZone[movingZone].Characters.Add(character, 0);
+                
+                loosingTransition.board.UsZone[movingZone].Characters[character] += nb;
             }
             
-            loosingTransition.board.Remove(loosingTransition.board.Find(b => b.Character.Name == character.Name && b.Area == zone));   
+            loosingTransition.board.UsZone[zone].Characters.Remove(character);
             
             newTransitions.Add(winningTransition);
             newTransitions.Add(loosingTransition);
         }
 
-        this.transitions = newTransitions;
+        transitions = newTransitions;
     }
 
-    public Action(List<Battalion> board, Character character)
+    public Action(Board board, Character character)
     {
-        this.transitions = new List<Transition>()
+        transitions = new List<Transition>()
         {
             new Transition(board, 1)
         };
@@ -114,18 +116,18 @@ public class Action
 
     public Action(Action action)
     {
-        this.transitions = new List<Transition>();
+        transitions = new List<Transition>();
+        
         foreach (var actionTransition in action.transitions)
-        {
-            this.transitions.Add(new Transition(actionTransition.board.Select(x=> x.Clone()).ToList(), actionTransition.proba));
-        }
-        this.character = action.character;
-        this.movingZone = action.movingZone;
-        this.fightingZone = action.fightingZone;
-        this.recruitingZone = action.recruitingZone;
+            transitions.Add(new Transition(new Board(actionTransition.board.UsZone), actionTransition.proba));
+        
+        character = action.character;
+        movingZone = action.movingZone;
+        fightingZone = action.fightingZone;
+        recruitingZone = action.recruitingZone;
     }
 
-    public List<Battalion> GetBoard()
+    public Board GetBoard()
     {
         if(transitions.Count != 1)
             throw new Exception("More than one transition");
@@ -135,21 +137,19 @@ public class Action
 
 public class AI
 {
+
     private List<Area> allAreas = new List<Area>() {Area.MIDWEST, Area.NORTHEAST, Area.NORTHWEST, Area.SOUTHEAST, Area.SOUTHWEST, Area.NORTH_CENTRAL, Area.SOUTH_CENTRAL};
     public List<Area> AllAreas
     {
         get => allAreas;
     }
-
     private List<Character> characters;
     public List<Character> Characters
     {
         get => characters;
         set => characters = value;
     }
-
     private Character simulatedPlayer;
-
     public Character SimulatedPlayer
     {
         get => simulatedPlayer;
@@ -167,25 +167,22 @@ public class AI
         {Area.SOUTH_CENTRAL, new List<Area>() {Area.SOUTHWEST, Area.NORTH_CENTRAL, Area.MIDWEST, Area.SOUTHEAST}}
     };
     
-    public List<(Character, float)> Evaluate(List<Battalion> board, List<Character> characters)
+    public List<(Character, float)> Evaluate(Board board, List<Character> characters)
     {
         return characters.Select(character => (character, GetCharacterEvaluation(character, board))).ToList();
     }
-    private float GetCharacterEvaluation(Character character, List<Battalion> board)
+    private float GetCharacterEvaluation(Character character, Board board)
     {
         float percentage = 0;
-        
-        float nbUnits = board.Where(b => b.Character.Name == character.Name)
-            .Sum(b => b.NumberOfUnits);
 
-        var controlledZones = GetZoneMasters(board).FindAll(b => b.Character.Name.Equals(character.Name)).Count;
+        float nbUnits = GetTotalNumberOfUnitsInField(character, board);
+
+        var controlledZones = GetNumberOfControlledZones(character, board);
         
         switch (character.Name)
         {
             case "Agent Yellow":
-                percentage = nbUnits / board
-                    .Where(b => b.Character.Name == "Colonel Red")
-                    .Sum(b => b.NumberOfUnits) * 100;
+                percentage = nbUnits / GetTotalNumberOfUnitsInField(characters.Find(c => c.Name == "Colonel Red"), board) * 100;
                 break;
             
             case "Colonel Red":
@@ -204,82 +201,100 @@ public class AI
         
         return percentage;
     }
-    public List<Battalion> GetZoneMasters(List<Battalion> units)
-    {
-        var result = new List<Battalion>();
-        foreach (var battalion in units)
-        {
-            Battalion concurrent = result.Find(b => battalion.Area == b.Area);
-            
-            if(concurrent == null && battalion.NumberOfUnits > 0)
-                result.Add(battalion);
-            else if (concurrent != null && concurrent.NumberOfUnits < battalion.NumberOfUnits)
-            {
-                result.Remove(concurrent);
-                result.Add(battalion);
-            }
-            else if(concurrent != null && concurrent.NumberOfUnits == battalion.NumberOfUnits)
-                result.Remove(concurrent);
-        }
-        return result;
-    }
-    public HashSet<Area> GetSurroundingZonesInPerimeter(int distance, Area startingZone)
-    {
-        HashSet<Area> result = new HashSet<Area>(surroundings[startingZone]);
 
-        for (int i = 0; i < distance - 1; i++)
-            foreach (Area area in result.Reverse())
+    private int GetNumberOfControlledZones(Character character, Board board)
+    {
+        var count = 0;
+        foreach (var zone in board.UsZone)
+        {
+            if (!zone.Value.Characters.ContainsKey(character)) continue;
+            var maxValue = zone.Value.Characters[character];
+            var isMaster = maxValue != 0;
+
+            if (maxValue != 0)
+                foreach (var player in 
+                    zone.Value.Characters
+                        .Where(player => player.Key != character)
+                        .Where(player => player.Value >= maxValue))
+                    isMaster = false;
+                
+            if (isMaster)
+                count++;
+        }
+        return count;
+    }
+
+    private HashSet<Area> GetSurroundingZonesInPerimeter(int distance, Area startingZone)
+    {
+        var result = new HashSet<Area>(surroundings[startingZone]);
+
+        for (var i = 0; i < distance - 1; i++)
+            foreach (var area in result.Reverse())
                 result.UnionWith(surroundings[area]);
         
         result.Remove(startingZone);
         return result;
     }
-    public List<Area> GetZonesWhereCharacterHasUnits(Character character, List<Battalion> board)
+
+    private List<Area> GetZonesWhereCharacterHasUnits(Character character, Board board)
     {
-        List<Area> areas = board.Where(b => b.Character.Name == character.Name)
-            .Select(u => u.Area)
+        return board.UsZone
+            .Where(x => x.Value.Characters.ContainsKey(character) && x.Value.Characters[character] > 0)
+            .Select(x => x.Key)
             .ToList();
-        return areas;
-    }
-    public int GetNumberOfUnitsInArea(Area area, Character character, List<Battalion> board)
-    {
-        return board.Find(b => b.Character.Name == character.Name && b.Area == area).NumberOfUnits;
     }
 
-    public float GetAttackProbabilityOfSuccess(Character character, Area area, List<Battalion> board)
+    private int GetNumberOfUnitsInArea(Area area, Character character, Board board)
+    {
+        return board.UsZone[area].Characters.ContainsKey(character) ? board.UsZone[area].Characters[character] : 0;
+    }
+    private float GetAttackProbabilityOfSuccess(Character character, Area area, Board board)
     {
         return ((float)GetNumberOfUnitsInArea(area, character, board)) / (float)6;
     }
-    public int GetTotalNumberOfUnitsInField(Character character, List<Battalion> board)
+    private int GetTotalNumberOfUnitsInField(Character character, Board board)
     {
-        return board
-            .Where(b => b.Character.Name == character.Name)
-            .Sum(b => b.NumberOfUnits); 
+        return board.UsZone
+            .Where(x => x.Value.Characters.ContainsKey(character) && x.Value.Characters[character] > 0)
+            .Select(x => x.Value.Characters[character])
+            .Sum();
     }
 
-    private List<Action> GetAllPossibleMoves(Character player, List<Battalion> board)
+    private bool SimulationIfControlsArea(Character character, Board board, Area area, int NbOfUnitsChanging)
+    {
+        var maxValue = board.UsZone[area].Characters[character] + NbOfUnitsChanging;
+        var isMaster = maxValue >= 0;
+        
+        foreach (var zone in board.UsZone[area].Characters)
+            if(zone.Value >= maxValue && isMaster && zone.Key != character)
+                isMaster = false;
+        return isMaster;
+    }
+    
+    private List<Action> GetAllPossibleMoves(Character player, Board board)
     {
         List<Action> result = new List<Action>();
         List<Action> recruitmentAction = new List<Action>();
-
+        List<Action> temporaryList = new List<Action>();
+        
         if (player.NumberOfUnits > GetTotalNumberOfUnitsInField(player, board))
         {
-            // Recruitment
-            recruitmentAction = board.Where(b => b.Character.Name == player.Name)
-                .Select(u => u.Area)
+            
+            // Recrutement, on ajoute toutes les zones où le personnage a une unité
+            result = board.UsZone.Where(b => b.Value.Characters.ContainsKey(player) && b.Value.Characters[player] > 0)
                 .Select(u =>
                 {
-                    var action = new Action(board.Select(x=> x.Clone()).ToList(), player);
-                    action.Recruit(u);
+                    var action = new Action(new Board(board.UsZone), player);
+                    action.Recruit(u.Key);
                     return action;
-                })
-                .ToList();
-
-            if (GetTotalNumberOfUnitsInField(player, board) == 0)
+                }).ToList();
+            
+            // si le personnage n'a plus d'unités sur le board, on ajoute toutes les zones
+            if (result.Count == 0)
             {
-                recruitmentAction = AllAreas.Select(a => 
+                result = AllAreas.Select(a => 
                 { 
-                    var action = new Action(board.Select(x=> x.Clone()).ToList(), player);
+                    var action = new Action(new Board(board.UsZone), player);
                     action.Recruit(a);
                     return action; 
                 }).ToList();
@@ -287,104 +302,116 @@ public class AI
         }
         else
         {
-            recruitmentAction.Add(new Action(board, player));
             result.Add(new Action(board, player));
         }
-
-        // Moving
-        List<Action> movingAction1 = new List<Action>();
-        recruitmentAction.ForEach(a =>
+        
+        // cas où le joueur fait Recrutement -> Fight et zappe le mouvemeent
+        result.ForEach(a =>
         {
-            result.Add(a);
+            // trouver toutes les attaques possibles
+            var zone = new List<KeyValuePair<Area, USZone>>();
+            var zones2 = new List<(Area, Character)>();
             
+            // récupère toutes les zones où il peut attaquer
+            zone = a.GetBoard().UsZone
+                .Where(b => b.Value.Characters.Values.Count > 1 && b.Value.Characters.ContainsKey(player) && b.Value.Characters[player] > 0)
+                .ToList();
+            
+            // on converti ça en list de tuples
+            foreach (var t in zone)
+            {
+                zones2.AddRange(t.Value.Characters
+                    .Where(k => k.Key != player)
+                    .Select(i => (t.Key, i.Key)));
+            }
+            
+            // pour chacun on crée un état si la proba de succès est supérieure à 40%
+            zones2.ForEach(z =>
+            {
+                foreach (var area in GetSurroundingZonesInPerimeter(1, z.Item1))
+                {
+                    float proba = GetAttackProbabilityOfSuccess(a.character, z.Item1, a.GetBoard());
+
+                    if (proba >= 0.40)
+                    {
+                        Action clone = new Action(a) {fightingZone = z};
+                        clone.Fight(proba, area);
+                        recruitmentAction.Add(clone);
+                    }
+                }
+            });
+        });
+        
+        // Mouvement
+        foreach (var a in result.Reverse<Action>())
+        {
             GetZonesWhereCharacterHasUnits(player, a.GetBoard()).ForEach(z =>
             {
-                
-                for(int i = 1; i < GetNumberOfUnitsInArea(z, player, a.GetBoard()); i++)
+                for(int i = 1; i <= GetNumberOfUnitsInArea(z, player, a.GetBoard()); i++)
                 {
-                    Action clone = new Action(a);
-                    clone.movingZone.Item1 = z;
-                    clone.movingZone.Item3 = i;
-                    movingAction1.Add(clone);
+                    // added for perfs issues : on bouge si on ne perd pas le contrôle de la zone d'où on vient
+                    if (!SimulationIfControlsArea(player, a.GetBoard(), z, -i) && 
+                        SimulationIfControlsArea(player, a.GetBoard(), z, 0))
+                        continue;
+                    foreach (var clone in GetSurroundingZonesInPerimeter(1, z)
+                        .Select(area => new Action(a) {movingZone = {Item1 = z, Item3 = i, Item2 = area}}))
+                    {
+                        clone.Move(clone.movingZone.Item1, clone.movingZone.Item2, clone.movingZone.Item3);
+                        result.Add(clone);
+                    }
                 }
-                
             });
-        });
-        
-        List<Action> movingAction2 = new List<Action>();
-        movingAction1.ForEach(a =>
-        {
-            foreach (Area area in GetSurroundingZonesInPerimeter(1, a.movingZone.Item1))
-            {
-                Action clone = new Action(a);
-                clone.movingZone.Item2 = area;
-                
-                clone.Move(clone.movingZone.Item1, clone.movingZone.Item2, clone.movingZone.Item3);
-                movingAction2.Add(clone);
-            }
-        });
-        
+        }
+
         // Fighting
-
-        movingAction2.ForEach(a => { 
-            result.Add(a);
-            // trouver toutes les attaques possibles
-            List<Area> zones = a.GetBoard().Where(b => b.Character.Name == a.character.Name)
-                .Select(u => u.Area)
-                .ToList();
-
-            List<(Area, Character)> zones2 = a.GetBoard()
-                .Where(b => b.Character.Name != a.character.Name && zones.Contains(b.Area))
-                .Select(p => (p.Area, p.Character))
-                .ToList();
-            
-            // pour chaque attaque créer un état s'il gagne + s'il perd
-            zones2.ForEach(z =>
-            {
-                // Le cas où il gagne
-                foreach (var area in GetSurroundingZonesInPerimeter(1, z.Item1))
-                {
-                    Action clone = new Action(a);
-                    clone.fightingZone = z;
-                    clone.Fight(GetAttackProbabilityOfSuccess(a.character, z.Item1, a.GetBoard()), area);
-                    result.Add(clone);
-                }
-            });
-        });
         
-        recruitmentAction.ForEach(a =>
-        {
-            result.Add(a);
+        result.ForEach(a => { 
             // trouver toutes les attaques possibles
-            List<Area> zones = a.GetBoard().Where(b => b.Character.Name == a.character.Name)
-                .Select(u => u.Area)
-                .ToList();
-
-            List<(Area, Character)> zones2 = a.GetBoard()
-                .Where(b => b.Character.Name != a.character.Name && zones.Contains(b.Area))
-                .Select(p => (p.Area, p.Character))
+            
+            List<(Area, Character)> zones2 = new List<(Area, Character)>();
+            List<KeyValuePair<Area, USZone>> zone = new List<KeyValuePair<Area, USZone>>();
+            zone = a.GetBoard().UsZone
+                .Where(b => b.Value.Characters.ContainsKey(a.character) && b.Value.Characters[a.character] > 0 &&
+                            b.Value.Characters.Values.Count > 1)
                 .ToList();
             
-            // pour chaque attaque créer un état s'il gagne + s'il perd
+            foreach (var t in zone)
+            {
+                zones2.AddRange(t.Value.Characters
+                    .Where(k => k.Key != player)
+                    .Select(i => (t.Key, i.Key)));
+            }
+            
             zones2.ForEach(z =>
             {
-                foreach (var area in GetSurroundingZonesInPerimeter(1, z.Item1))
+                HashSet<Area> surroundingsAreas = GetSurroundingZonesInPerimeter(1, z.Item1);
+
+                foreach (var area in surroundingsAreas)
                 {
-                    Action clone = new Action(a);
-                    clone.fightingZone = z;
-                    clone.Fight(GetAttackProbabilityOfSuccess(a.character, z.Item1, a.GetBoard()), area);
-                    result.Add(clone);
+                    float proba = GetAttackProbabilityOfSuccess(a.character, z.Item1, a.GetBoard());
+                    if(proba >= 0.40)
+                    {
+                        var clone = new Action(a) {fightingZone = z};
+                        clone.Fight(proba, area);
+                        temporaryList.Add(clone);
+                    }
                 }
             });
         });
+        result.AddRange(temporaryList);
+        result.AddRange(recruitmentAction);
+        
+        result = result.OrderByDescending(o => o.fightingZone.Item2).ToList();       
+        temporaryList = null;
+        recruitmentAction = null;
         return result;
     }
 
-    private float Maxn(List<Battalion> board, int depth, Character player, int n)
+    private float Maxn(Board board, int depth, Character player, int n)
     {
         float score = GetCharacterEvaluation(player, board);
 
-        if (score >= 100 || score <= -100 || depth == 0)
+        if (score >= 100 || score <= -100 || depth <= 0)
             return score;
         
         float best = -1000;
@@ -401,28 +428,22 @@ public class AI
                                transition.proba;
             }
             best = Math.Max(best, actionValue);
-
         }
         return best;
     }
 
-    private Action FindBestMove(List<Battalion> board, Character player)
+    private Action FindBestMove(Board board, Character player)
     {
-        var bestMove = new Action(new List<Battalion>(), player);
+        var bestMove = new Action(new Board(), player);
         float bestVal = -1000;
         
         foreach (var action in GetAllPossibleMoves(player, board))
         {
-            float actionValue = 0;
-            foreach (Transition transition in action.transitions)
-            {
-                actionValue += Maxn(transition.board, 1, Characters[0], 0) * transition.proba;
-            }
-            if (actionValue > bestVal)
-            {
-                bestMove = action;
-                bestVal = actionValue;
-            }
+            float actionValue = action.transitions.Sum(transition => Maxn(transition.board, 1, Characters[0], 0) * transition.proba);
+
+            if (!(actionValue > bestVal)) continue;
+            bestMove = action;
+            bestVal = actionValue;
         }
 
         return bestMove;
@@ -430,18 +451,23 @@ public class AI
 
     public void test(Character character, List<Battalion> board, List<Character> characters)
     {
+        
+        Board b = new Board();
+        foreach (var battalion in board)
+            b.UsZone[battalion.Area].Characters.Add(battalion.Character, battalion.NumberOfUnits);
+
         Stopwatch stopWatch = new Stopwatch();
         stopWatch.Start();
         Characters = characters;
         SimulatedPlayer = character;
         
-        //Action action = FindBestMove(board, character);
+        Action action = FindBestMove(b, characters.Find(c => c.Name == " President Blue"));
         
-        /*Debug.Log("Recruiting zone : " + action.recruitingZone);
+        Debug.Log("Recruiting zone : " + action.recruitingZone);
         Debug.Log("Moving zone : " + action.movingZone);
-        Debug.Log("Fighting zone : " + action.fightingZone);*/
+        Debug.Log("Fighting zone : " + action.fightingZone);
         
-        Debug.Log(GetAllPossibleMoves(character, board).Count);
+        //Debug.Log(GetAllPossibleMoves(characters.Find(c => c.Name == " President Blue"), b).Count);
         
         stopWatch.Stop();
         // Get the elapsed time as a TimeSpan value.

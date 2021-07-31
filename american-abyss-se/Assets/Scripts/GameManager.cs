@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
     public FightingPopUpUI fightingPopUpUI;
 
     public WinningUI winningUI;
-
+    public bool test = false;
     void Start()
     {
         if (characters == null)
@@ -51,12 +51,22 @@ public class GameManager : MonoBehaviour
         characters = characters.OrderBy(a => rng.Next()).ToList();
         NextTurn();
         
-        List<Battalion> boardCopy = troopManager.Units.Select(x=> x.Clone()).ToList();
-        List<Battalion> newList = troopManager.Units.GetRange(0, troopManager.Units.Count);
-        AI ai = new AI();
-        ai.test(Character, boardCopy, characters);
+        
     }
-    
+
+    void Update()
+    {
+        if (!test)
+        {
+            List<Battalion> boardCopy = troopManager.Units.Select(x=> x.Clone()).ToList();
+            List<Battalion> newList = troopManager.Units.GetRange(0, troopManager.Units.Count);
+            AI ai = new AI();
+            ai.test(Character, boardCopy, characters);
+            test = true;
+        }
+        
+    }
+
     public void NextTurn()
     {
         if (index >= characters.Count)

@@ -114,6 +114,7 @@
             <e p="Zone.cs" t="Include" />
           </e>
           <e p="Battalion.cs" t="Include" />
+          <e p="Board.cs" t="Include" />
           <e p="Character.cs" t="Include" />
           <e p="CharacterInfoUI.cs" t="Include" />
           <e p="ChooseFactionUI.cs" t="Include" />

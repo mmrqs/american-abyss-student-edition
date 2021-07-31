@@ -311,6 +311,7 @@
 "Assets/Scripts/AreaManager.cs"
 "Assets/Scripts/Areas/Zone.cs"
 "Assets/Scripts/Battalion.cs"
+"Assets/Scripts/Board.cs"
 "Assets/Scripts/Character.cs"
 "Assets/Scripts/CharacterInfoUI.cs"
 "Assets/Scripts/ChooseFactionUI.cs"

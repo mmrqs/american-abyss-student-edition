@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 [CreateAssetMenu(menuName = "Character/Character")]
-public class Character : ScriptableObject
+public class Character : ScriptableObject, IComparable<Character>
 {
     [SerializeField] protected string _name;
     public string Name => _name;
@@ -38,4 +39,17 @@ public class Character : ScriptableObject
 
     [SerializeField] protected string aim;
     public string Aim => aim;
+
+    public override string ToString()
+    {
+        return $"{base.ToString()}, {nameof(Name)}: {Name}, {nameof(NumberOfUnits)}: {NumberOfUnits}, {nameof(Background)}: {Background}, {nameof(Image)}: {Image}, {nameof(MovingZoneDistance)}: {MovingZoneDistance}, {nameof(NumberOfTroopsDestroyed)}: {NumberOfTroopsDestroyed}, {nameof(NbOfTerritoriesToControl)}: {NbOfTerritoriesToControl}, {nameof(AmountOfMoneyToHave)}: {AmountOfMoneyToHave}, {nameof(Color)}: {Color}, {nameof(Aim)}: {Aim}";
+    }
+
+    public int CompareTo(Character obj)
+    {
+        if (obj == null)
+            return 1;
+        else
+            return string.Compare(this.Name, obj.Name, StringComparison.Ordinal);
+    }
 }
