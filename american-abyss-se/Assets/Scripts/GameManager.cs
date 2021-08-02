@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     public Button recruitment;
     public Button movingButton;
     public Button attackingButton;
+    public Button skipButton;
 
     private int index;
     private Character currentCharacter;
@@ -56,14 +57,13 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (!test)
+        /*if (!test)
         {
             List<Battalion> boardCopy = troopManager.Units.Select(x=> x.Clone()).ToList();
-            List<Battalion> newList = troopManager.Units.GetRange(0, troopManager.Units.Count);
             AI ai = new AI();
             ai.test(Character, boardCopy, characters);
             test = true;
-        }
+        }*/
         
     }
 
@@ -85,7 +85,29 @@ public class GameManager : MonoBehaviour
         recruitment.gameObject.SetActive(true);
         attackingButton.gameObject.SetActive(false);
         movingButton.gameObject.SetActive(false);
+        skipButton.gameObject.SetActive(true);
         CheckEndGame();
+        areaManager.Init();
+    }
+
+    public void NextAction()
+    {
+        CurrentMode = Mode.DEFAULT;
+        if (recruitment.IsActive())
+        {
+            recruitment.gameObject.SetActive(false);
+            movingButton.gameObject.SetActive(true);
+            Debug.Log("tameere");
+        } else if (movingButton.IsActive())
+        {
+            attackingButton.gameObject.SetActive(true);
+            movingButton.gameObject.SetActive(false);
+        } else if (attackingButton.IsActive())
+        {
+            attackingButton.gameObject.SetActive(false);
+            skipButton.gameObject.SetActive(false);
+        }
+        //
         areaManager.Init();
     }
 
@@ -97,15 +119,13 @@ public class GameManager : MonoBehaviour
         {
             DisplayMessagePopUp("Select an area to place your new unit.");
 
-            recruitment.enabled = false;
+            //recruitment.enabled = false;
             List<Zone> zones = troopManager.GetZonesWhereCharacterHasUnits(currentCharacter);
             if (zones.Count == 0)
                 zones = troopManager.GetAllZones();
             areaManager.StartFlashing(zones);
             CurrentMode = Mode.RECRUIT;
         }
-        recruitment.gameObject.SetActive(false);
-        movingButton.gameObject.SetActive(true);
     }
 
     public void Attack()
@@ -120,7 +140,6 @@ public class GameManager : MonoBehaviour
         zones = zones.Where(z => troopManager.GetCharactersInZone(z.Name).Count > 1).ToList();
         if (zones.Count != 0)
             areaManager.StartFlashing(zones);
-        attackingButton.gameObject.SetActive(false);
     }
 
     public void InitiateFight(Area area, Character character)
@@ -155,6 +174,8 @@ public class GameManager : MonoBehaviour
             areaManager.StartFlashing(areaManager.troopManager.GetZones(areaManager.troopManager.GetZone(area).Surroundings));
             CurrentMode = Mode.MOVE;
         }
+        attackingButton.gameObject.SetActive(false);
+        skipButton.gameObject.SetActive(false);
     }
     
     public void MoveUnits()
@@ -163,8 +184,6 @@ public class GameManager : MonoBehaviour
         CurrentMode = Mode.MOVE;
         List<Zone> zones = troopManager.GetZonesWhereCharacterHasUnits(currentCharacter);
         areaManager.StartFlashing(zones);
-        attackingButton.gameObject.SetActive(true);
-        movingButton.gameObject.SetActive(false);
     }
     
     public void DisplayMessagePopUp(string message)

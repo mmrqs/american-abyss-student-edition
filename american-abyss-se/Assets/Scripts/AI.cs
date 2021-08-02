@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using Unity.Collections.LowLevel.Unsafe;
 using Debug = UnityEngine.Debug;
 
 public class Transition
@@ -407,26 +408,25 @@ public class AI
         return result;
     }
 
+    private static int cnt = 0;
     private float Maxn(Board board, int depth, Character player, int n)
     {
+        cnt++;
         float score = GetCharacterEvaluation(player, board);
-
-        if (score >= 100 || score <= -100 || depth <= 0)
+        int nextN = (n + 1) % (Characters.Count);
+        if (score >= 100 || score <= -100 || player.Name == SimulatedPlayer.Name)
             return score;
         
         float best = -1000;
-
-        foreach (Action move in GetAllPossibleMoves(player, board))
+        
+        var newDepth = depth;
+        newDepth = depth - 1;
+        var possibilities = GetAllPossibleMoves(player, board);
+        
+        foreach (Action move in possibilities)
         {
-            float actionValue = 0;
-            foreach (Transition transition in move.transitions)
-            {
-                var newDepth = depth;
-                if (Characters[n % Characters.Count].Name == SimulatedPlayer.Name)
-                    newDepth = depth - 1;
-                actionValue += Maxn(transition.board, newDepth, Characters[(n + 1) % Characters.Count], n + 1) *
-                               transition.proba;
-            }
+            float actionValue = move.transitions
+                .Sum(transition => Maxn(transition.board, newDepth, Characters[(nextN) % (Characters.Count)], nextN) * transition.proba);
             best = Math.Max(best, actionValue);
         }
         return best;
@@ -436,10 +436,11 @@ public class AI
     {
         var bestMove = new Action(new Board(), player);
         float bestVal = -1000;
-        
-        foreach (var action in GetAllPossibleMoves(player, board))
+        var values = GetAllPossibleMoves(player, board);
+        foreach (var action in values)
         {
-            float actionValue = action.transitions.Sum(transition => Maxn(transition.board, 1, Characters[0], 0) * transition.proba);
+            int index = Characters.FindIndex(p => p.Name == SimulatedPlayer.Name);
+            float actionValue = action.transitions.Sum(transition => Maxn(transition.board, 1, Characters[(index + 1) % Characters.Count], (index + 1) % Characters.Count) * transition.proba);
 
             if (!(actionValue > bestVal)) continue;
             bestMove = action;
@@ -461,7 +462,7 @@ public class AI
         Characters = characters;
         SimulatedPlayer = character;
         
-        Action action = FindBestMove(b, characters.Find(c => c.Name == " President Blue"));
+        Action action = FindBestMove(b, SimulatedPlayer);
         
         Debug.Log("Recruiting zone : " + action.recruitingZone);
         Debug.Log("Moving zone : " + action.movingZone);

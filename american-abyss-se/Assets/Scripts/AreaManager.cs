@@ -123,6 +123,7 @@ public class AreaManager : MonoBehaviour
     {
         troopManager.AddUnitToZone(gameManager.Character, area, NumberOfUnits);
         Init();
+        gameManager.NextAction();
     }
 
     public void MoveTroop(Area startingZone, Area endingZone)
@@ -133,6 +134,7 @@ public class AreaManager : MonoBehaviour
         StopCoroutine(flashing2);
         movingTroopsUI.Init();
         Init();
+        gameManager.NextAction();
     }
 
     public void StartFlashing(List<Zone> zones)
@@ -140,7 +142,7 @@ public class AreaManager : MonoBehaviour
         flashing = StartCoroutine(LightZones(zones));
     }
 
-    private void StopFlashing()
+    public void StopFlashing()
     {
         if (Flashing != null)
         {
