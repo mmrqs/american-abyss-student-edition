@@ -2,114 +2,34 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using Debug = UnityEngine.Debug;
 
 public class Transition
 {
-    public Board board;
-    public float proba;
+    //public Board board;
+    public readonly float proba;
 
-    public Transition(Board _board, float _proba)
+    public Transition(float proba)
     {
-        board = _board;
-        proba = _proba;
+        //board = _board;
+        this.proba = proba;
     }
 }
+
 public class Action
 {
     public Area recruitingZone;
     public (Area, Area, int) movingZone;
-    public (Area, Character) fightingZone;
+    // fighting / character / moving zone
+    public (Area, Character, Area) fightingZone;
     public List<Transition> transitions;
     public Character character;
-    
-    // recrute une unité sur une zone spécifique
-    public void Recruit(Area area)
-    {
-        if(!transitions[0].board.UsZone[area].Characters.ContainsKey(character))
-            transitions[0].board.UsZone[area].Characters.Add(character, 0);
 
-        transitions[0].board.UsZone[area].Characters[character] += 1;
-        recruitingZone = area;
-    }
-    
-    // bouge une ou plusieurs unités
-    public void Move(Area startingArea, Area endArea, int numberOfUnitsToMove)
-    {
-        transitions[0].board.UsZone[startingArea].Characters[character] -= numberOfUnitsToMove;
-            
-        if (transitions[0].board.UsZone[startingArea].Characters[character] <= 0)
-            transitions[0].board.UsZone[startingArea].Characters.Remove(character);
-
-        
-        if(!transitions[0].board.UsZone[endArea].Characters.ContainsKey(character))
-            transitions[0].board.UsZone[endArea].Characters.Add(character, 0);
-            
-        transitions[0].board.UsZone[endArea].Characters[character] += numberOfUnitsToMove;
-    }
-    
-    // combat une unité
-    public void Fight(float chanceToWin, Area movingZone)
-    {
-        Character adverser = fightingZone.Item2;
-        Area zone = fightingZone.Item1;
-        
-        fightingZone = (zone, adverser);
-        
-        // créée un état gagnant et un état perdant
-        List<Transition> newTransitions = new List<Transition>();
-        
-        foreach (Transition transition in transitions)
-        {
-            Transition winningTransition = new Transition(new Board(transition.board.UsZone), chanceToWin);
-            Transition loosingTransition = new Transition(transition.board, 1 - chanceToWin);
-
-            for (var i = 0; i < character.NumberOfTroopsDestroyed; i++)
-                if (winningTransition.board.UsZone[zone].Characters[adverser] > 0)
-                    winningTransition.board.UsZone[zone].Characters[adverser] -= 1;
-
-            int nb = winningTransition.board.UsZone[zone].Characters[adverser];
-            
-            if (nb > 0)
-            {
-                if (!winningTransition.board.UsZone[movingZone].Characters.ContainsKey(adverser))
-                    winningTransition.board.UsZone[movingZone].Characters.Add(adverser, 0);
-
-                winningTransition.board.UsZone[movingZone].Characters[adverser] += nb;
-            }
-
-            winningTransition.board.UsZone[zone].Characters.Remove(adverser);
-            
-            // détruit unités
-            if (loosingTransition.board.UsZone[zone].Characters[character] > 0)
-                loosingTransition.board.UsZone[zone].Characters[character] -= 1;
-         
-            nb = loosingTransition.board.UsZone[zone].Characters[character];
-            
-            // s'il reste des unités on les bouge
-            if (nb != 0)
-            {
-                if (!loosingTransition.board.UsZone[movingZone].Characters.ContainsKey(character))
-                    loosingTransition.board.UsZone[movingZone].Characters.Add(character, 0);
-                
-                loosingTransition.board.UsZone[movingZone].Characters[character] += nb;
-            }
-            
-            loosingTransition.board.UsZone[zone].Characters.Remove(character);
-            
-            newTransitions.Add(winningTransition);
-            newTransitions.Add(loosingTransition);
-        }
-
-        transitions = newTransitions;
-    }
-
-    public Action(Board board, Character character)
+    public Action(Character character)
     {
         transitions = new List<Transition>()
         {
-            new Transition(board, 1)
+            new Transition(1)
         };
         this.character = character;
     }
@@ -119,44 +39,22 @@ public class Action
         transitions = new List<Transition>();
         
         foreach (var actionTransition in action.transitions)
-            transitions.Add(new Transition(new Board(actionTransition.board.UsZone), actionTransition.proba));
+            transitions.Add(new Transition(actionTransition.proba));
         
         character = action.character;
         movingZone = action.movingZone;
         fightingZone = action.fightingZone;
         recruitingZone = action.recruitingZone;
     }
-
-    public Board GetBoard()
-    {
-        if(transitions.Count != 1)
-            throw new Exception("More than one transition");
-        return transitions[0].board;
-    }
 }
 
 public class AI
 {
+    private List<Area> AllAreas { get; } = new List<Area>() {Area.MIDWEST, Area.NORTHEAST, Area.NORTHWEST, Area.SOUTHEAST, Area.SOUTHWEST, Area.NORTH_CENTRAL, Area.SOUTH_CENTRAL};
+    private List<Character> Characters { get; set; }
+    private Character SimulatedPlayer { get; set; }
 
-    private List<Area> allAreas = new List<Area>() {Area.MIDWEST, Area.NORTHEAST, Area.NORTHWEST, Area.SOUTHEAST, Area.SOUTHWEST, Area.NORTH_CENTRAL, Area.SOUTH_CENTRAL};
-    public List<Area> AllAreas
-    {
-        get => allAreas;
-    }
-    private List<Character> characters;
-    public List<Character> Characters
-    {
-        get => characters;
-        set => characters = value;
-    }
-    private Character simulatedPlayer;
-    public Character SimulatedPlayer
-    {
-        get => simulatedPlayer;
-        set => simulatedPlayer = value;
-    }
-
-    public Dictionary<Area, List<Area>> surroundings = new Dictionary<Area, List<Area>>()
+    private readonly Dictionary<Area, List<Area>> surroundings = new Dictionary<Area, List<Area>>()
     {
         {Area.MIDWEST, new List<Area>() {Area.NORTH_CENTRAL, Area.SOUTH_CENTRAL, Area.SOUTHEAST, Area.NORTHEAST}},
         {Area.NORTHEAST, new List<Area>() {Area.MIDWEST, Area.SOUTHEAST}},
@@ -167,10 +65,6 @@ public class AI
         {Area.SOUTH_CENTRAL, new List<Area>() {Area.SOUTHWEST, Area.NORTH_CENTRAL, Area.MIDWEST, Area.SOUTHEAST}}
     };
     
-    public List<(Character, float)> Evaluate(Board board, List<Character> characters)
-    {
-        return characters.Select(character => (character, GetCharacterEvaluation(character, board))).ToList();
-    }
     private float GetCharacterEvaluation(Character character, Board board)
     {
         float percentage = 0;
@@ -182,7 +76,7 @@ public class AI
         switch (character.Name)
         {
             case "Agent Yellow":
-                percentage = nbUnits / GetTotalNumberOfUnitsInField(characters.Find(c => c.Name == "Colonel Red"), board) * 100;
+                percentage = nbUnits / GetTotalNumberOfUnitsInField(Characters.Find(c => c.Name == "Colonel Red"), board) * 100;
                 break;
             
             case "Colonel Red":
@@ -202,7 +96,7 @@ public class AI
         return percentage;
     }
 
-    private int GetNumberOfControlledZones(Character character, Board board)
+    private static int GetNumberOfControlledZones(Character character, Board board)
     {
         var count = 0;
         foreach (var zone in board.UsZone)
@@ -224,7 +118,7 @@ public class AI
         return count;
     }
 
-    private HashSet<Area> GetSurroundingZonesInPerimeter(int distance, Area startingZone)
+    private IEnumerable<Area> GetSurroundingZonesInPerimeter(int distance, Area startingZone)
     {
         var result = new HashSet<Area>(surroundings[startingZone]);
 
@@ -236,7 +130,7 @@ public class AI
         return result;
     }
 
-    private List<Area> GetZonesWhereCharacterHasUnits(Character character, Board board)
+    private static List<Area> GetZonesWhereCharacterHasUnits(Character character, Board board)
     {
         return board.UsZone
             .Where(x => x.Value.Characters.ContainsKey(character) && x.Value.Characters[character] > 0)
@@ -244,15 +138,15 @@ public class AI
             .ToList();
     }
 
-    private int GetNumberOfUnitsInArea(Area area, Character character, Board board)
+    private static int GetNumberOfUnitsInArea(Area area, Character character, Board board)
     {
         return board.UsZone[area].Characters.ContainsKey(character) ? board.UsZone[area].Characters[character] : 0;
     }
-    private float GetAttackProbabilityOfSuccess(Character character, Area area, Board board)
+    private static float GetAttackProbabilityOfSuccess(Character character, Area area, Board board, int additionToZone)
     {
-        return ((float)GetNumberOfUnitsInArea(area, character, board)) / (float)6;
+        return ((float)GetNumberOfUnitsInArea(area, character, board) + additionToZone) / (float)6;
     }
-    private int GetTotalNumberOfUnitsInField(Character character, Board board)
+    private static int GetTotalNumberOfUnitsInField(Character character, Board board)
     {
         return board.UsZone
             .Where(x => x.Value.Characters.ContainsKey(character) && x.Value.Characters[character] > 0)
@@ -260,14 +154,18 @@ public class AI
             .Sum();
     }
 
-    private bool SimulationIfControlsArea(Character character, Board board, Area area, int NbOfUnitsChanging)
+    private static bool SimulationIfControlsArea(Character character, Board board, Area area, int nbOfUnitsChanging)
     {
-        var maxValue = board.UsZone[area].Characters[character] + NbOfUnitsChanging;
+        int maxValue;
+        if (!board.UsZone[area].Characters.ContainsKey(character))
+            maxValue = 1 + nbOfUnitsChanging;
+        else
+            maxValue = board.UsZone[area].Characters[character] + nbOfUnitsChanging;
+        
         var isMaster = maxValue >= 0;
         
-        foreach (var zone in board.UsZone[area].Characters)
-            if(zone.Value >= maxValue && isMaster && zone.Key != character)
-                isMaster = false;
+        foreach (var zone in board.UsZone[area].Characters.Where(zone => zone.Value >= maxValue && isMaster && zone.Key != character))
+            isMaster = false;
         return isMaster;
     }
     
@@ -284,8 +182,8 @@ public class AI
             result = board.UsZone.Where(b => b.Value.Characters.ContainsKey(player) && b.Value.Characters[player] > 0)
                 .Select(u =>
                 {
-                    var action = new Action(new Board(board.UsZone), player);
-                    action.Recruit(u.Key);
+                    var action = new Action(player) {recruitingZone = u.Key};
+                    //action.Recruit(u.Key);
                     return action;
                 }).ToList();
             
@@ -294,15 +192,14 @@ public class AI
             {
                 result = AllAreas.Select(a => 
                 { 
-                    var action = new Action(new Board(board.UsZone), player);
-                    action.Recruit(a);
+                    var action = new Action(player) {recruitingZone = a};
                     return action; 
                 }).ToList();
             }
         }
         else
         {
-            result.Add(new Action(board, player));
+            result.Add(new Action(player));
         }
         
         // cas où le joueur fait Recrutement -> Fight et zappe le mouvemeent
@@ -313,10 +210,13 @@ public class AI
             var zones2 = new List<(Area, Character)>();
             
             // récupère toutes les zones où il peut attaquer
-            zone = a.GetBoard().UsZone
+            zone = board.UsZone
                 .Where(b => b.Value.Characters.Values.Count > 1 && b.Value.Characters.ContainsKey(player) && b.Value.Characters[player] > 0)
                 .ToList();
             
+            if(zone.All(z => z.Key != a.recruitingZone) && a.recruitingZone != Area.FOO)
+                zone.Add(new KeyValuePair<Area, USZone>(a.recruitingZone, new USZone(board.UsZone[a.recruitingZone].Characters)));
+
             // on converti ça en list de tuples
             foreach (var t in zone)
             {
@@ -328,37 +228,39 @@ public class AI
             // pour chacun on crée un état si la proba de succès est supérieure à 40%
             zones2.ForEach(z =>
             {
-                foreach (var area in GetSurroundingZonesInPerimeter(1, z.Item1))
-                {
-                    float proba = GetAttackProbabilityOfSuccess(a.character, z.Item1, a.GetBoard());
-
-                    if (proba >= 0.40)
-                    {
-                        Action clone = new Action(a) {fightingZone = z};
-                        clone.Fight(proba, area);
-                        recruitmentAction.Add(clone);
-                    }
-                }
+                recruitmentAction.AddRange(from area in 
+                    GetSurroundingZonesInPerimeter(1, z.Item1) 
+                    let proba = GetAttackProbabilityOfSuccess(a.character, z.Item1, board, a.recruitingZone == z.Item1 ? 1 : 0) 
+                    where proba >= 0.40 select new Action(a) {fightingZone = {Item1 = z.Item1, Item3 = area, Item2 = z.Item2},
+                        transitions = new List<Transition>{new Transition(proba), new Transition(1-proba)}});
             });
         });
         
         // Mouvement
         foreach (var a in result.Reverse<Action>())
         {
-            GetZonesWhereCharacterHasUnits(player, a.GetBoard()).ForEach(z =>
+            List<Area> departureZones = GetZonesWhereCharacterHasUnits(player, board);
+            if (departureZones.Count == 0)
+                departureZones.Add(a.recruitingZone);
+            
+            departureZones.ForEach(z =>
             {
-                for(int i = 1; i <= GetNumberOfUnitsInArea(z, player, a.GetBoard()); i++)
+                float nbUnitsInArea = GetNumberOfUnitsInArea(z, player, board);
+                if (z == a.recruitingZone)
+                    nbUnitsInArea++;
+                
+                for(int i = 1; i <= nbUnitsInArea; i++)
                 {
+                    var addition = 0;
+                    if (z == a.recruitingZone)
+                        addition++;
                     // added for perfs issues : on bouge si on ne perd pas le contrôle de la zone d'où on vient
-                    if (!SimulationIfControlsArea(player, a.GetBoard(), z, -i) && 
-                        SimulationIfControlsArea(player, a.GetBoard(), z, 0))
+                    if (!SimulationIfControlsArea(player, board, z, -i + addition) && 
+                        SimulationIfControlsArea(player, board, z, addition))
                         continue;
-                    foreach (var clone in GetSurroundingZonesInPerimeter(1, z)
-                        .Select(area => new Action(a) {movingZone = {Item1 = z, Item3 = i, Item2 = area}}))
-                    {
-                        clone.Move(clone.movingZone.Item1, clone.movingZone.Item2, clone.movingZone.Item3);
-                        result.Add(clone);
-                    }
+
+                    result.AddRange(GetSurroundingZonesInPerimeter(1, z)
+                        .Select(area => new Action(a) {movingZone = {Item1 = z, Item3 = i, Item2 = area}}));
                 }
             });
         }
@@ -367,13 +269,27 @@ public class AI
         
         result.ForEach(a => { 
             // trouver toutes les attaques possibles
-            
+
             List<(Area, Character)> zones2 = new List<(Area, Character)>();
-            List<KeyValuePair<Area, USZone>> zone = new List<KeyValuePair<Area, USZone>>();
-            zone = a.GetBoard().UsZone
+
+           Dictionary<Area, USZone> zone = board.UsZone
                 .Where(b => b.Value.Characters.ContainsKey(a.character) && b.Value.Characters[a.character] > 0 &&
                             b.Value.Characters.Values.Count > 1)
-                .ToList();
+                .ToDictionary(x => x.Key, x => x.Value);
+
+           if(!zone.ContainsKey(a.recruitingZone) && a.recruitingZone != Area.FOO)
+                zone.Add(a.recruitingZone, new USZone(board.UsZone[a.recruitingZone].Characters));
+            
+            if(!zone.ContainsKey(a.movingZone.Item2) && a.movingZone.Item2 != Area.FOO)
+                zone.Add(a.movingZone.Item2, new USZone(board.UsZone[a.movingZone.Item2].Characters));
+
+            var add = a.recruitingZone == a.movingZone.Item1 ? 1 : 0;
+            
+            if (zone.ContainsKey(a.movingZone.Item1) &&
+                (GetNumberOfUnitsInArea(a.movingZone.Item1, a.character, board) + add) <= a.movingZone.Item3 
+                && a.movingZone.Item1 != Area.FOO)
+                zone.Remove(a.movingZone.Item1);
+            
             
             foreach (var t in zone)
             {
@@ -381,18 +297,26 @@ public class AI
                     .Where(k => k.Key != player)
                     .Select(i => (t.Key, i.Key)));
             }
-            
+
             zones2.ForEach(z =>
             {
-                HashSet<Area> surroundingsAreas = GetSurroundingZonesInPerimeter(1, z.Item1);
+                var surroundingsAreas = GetSurroundingZonesInPerimeter(1, z.Item1);
 
                 foreach (var area in surroundingsAreas)
                 {
-                    float proba = GetAttackProbabilityOfSuccess(a.character, z.Item1, a.GetBoard());
+                    var movements = 0;
+                    if(a.recruitingZone == area)
+                        movements++;
+                    if (a.movingZone.Item1 == area)
+                        movements -= a.movingZone.Item3;
+                    if (a.movingZone.Item2 == area)
+                        movements += a.movingZone.Item3;
+                    
+                    var proba = GetAttackProbabilityOfSuccess(a.character, z.Item1, board, movements);
                     if(proba >= 0.40)
                     {
-                        var clone = new Action(a) {fightingZone = z};
-                        clone.Fight(proba, area);
+                        var clone = new Action(a) {fightingZone = {Item1 = z.Item1, Item3 = area, Item2 = z.Item2},
+                            transitions = new List<Transition>() {new Transition(proba), new Transition(1 - proba)}};
                         temporaryList.Add(clone);
                     }
                 }
@@ -406,10 +330,11 @@ public class AI
         recruitmentAction = null;
         return result;
     }
-
+    
     private float Maxn(Board board, int depth, Character player, int n)
     {
         float score = GetCharacterEvaluation(player, board);
+        int nextN = (n + 1) % (Characters.Count);
 
         if (score >= 100 || score <= -100 || depth <= 0)
             return score;
@@ -419,28 +344,55 @@ public class AI
         foreach (Action move in GetAllPossibleMoves(player, board))
         {
             float actionValue = 0;
+        
+            var newBoard = (new Board(ActionSimulation.MakeMove(move, board, move.fightingZone.Item2).UsZone), 
+                move.fightingZone.Item1 == Area.FOO ? null : new Board(ActionSimulation.MakeMove(move, board, move.character).UsZone));
+            
+            bool win = true;
+
             foreach (Transition transition in move.transitions)
             {
                 var newDepth = depth;
-                if (Characters[n % Characters.Count].Name == SimulatedPlayer.Name)
+                if (Characters[n % (Characters.Count)].Name == SimulatedPlayer.Name)
                     newDepth = depth - 1;
-                actionValue += Maxn(transition.board, newDepth, Characters[(n + 1) % Characters.Count], n + 1) *
+            
+                var b = win ? newBoard.Item1 : newBoard.Item2;
+                
+                actionValue += Maxn(b, newDepth, Characters[(nextN) % (Characters.Count)], nextN) *
                                transition.proba;
+                win = false;
+
             }
+
             best = Math.Max(best, actionValue);
         }
         return best;
     }
 
-    private Action FindBestMove(Board board, Character player)
+    private Action FindBestMove(Board board)
     {
-        var bestMove = new Action(new Board(), player);
+        var player = SimulatedPlayer;
+        var bestMove = new Action(player);
         float bestVal = -1000;
         
         foreach (var action in GetAllPossibleMoves(player, board))
         {
-            float actionValue = action.transitions.Sum(transition => Maxn(transition.board, 1, Characters[0], 0) * transition.proba);
+            // TODO do action
+            var newBoard = (new Board(ActionSimulation.MakeMove(action, board, action.fightingZone.Item2).UsZone), 
+                action.fightingZone.Item1 == Area.FOO ? null : new Board(ActionSimulation.MakeMove(action, board, action.character).UsZone));
+         
+            bool win = true;
+            
+            float actionValue = 0;
+            int index = Characters.FindIndex(p => p.Name == SimulatedPlayer.Name);
 
+            foreach (var transition in action.transitions)
+            {
+                var b = win ? newBoard.Item1 : newBoard.Item2;
+                actionValue += Maxn(b, 2, Characters[(index + 1) % Characters.Count], (index + 1) % Characters.Count) * transition.proba;
+                win = false;
+
+            }
             if (!(actionValue > bestVal)) continue;
             bestMove = action;
             bestVal = actionValue;
@@ -460,15 +412,13 @@ public class AI
         stopWatch.Start();
         Characters = characters;
         SimulatedPlayer = character;
-        
-        Action action = FindBestMove(b, characters.Find(c => c.Name == " President Blue"));
+
+        Action action = FindBestMove(b);
         
         Debug.Log("Recruiting zone : " + action.recruitingZone);
         Debug.Log("Moving zone : " + action.movingZone);
         Debug.Log("Fighting zone : " + action.fightingZone);
-        
-        //Debug.Log(GetAllPossibleMoves(characters.Find(c => c.Name == " President Blue"), b).Count);
-        
+
         stopWatch.Stop();
         // Get the elapsed time as a TimeSpan value.
         TimeSpan ts = stopWatch.Elapsed;

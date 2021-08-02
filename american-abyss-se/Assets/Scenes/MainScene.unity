@@ -1468,8 +1468,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f861da42815940a081e14aa9c49d020, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _name: 2
-  _surroundings: 05000000020000000400000003000000
+  _name: 3
+  _surroundings: 02000000060000000500000004000000
 --- !u!1 &106755816
 GameObject:
   m_ObjectHideFlags: 0
@@ -1955,6 +1955,7 @@ MonoBehaviour:
   attackingButton: {fileID: 458128814}
   fightingPopUpUI: {fileID: 655009275}
   winningUI: {fileID: 185747091}
+  test: 0
 --- !u!114 &122936454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3115,8 +3116,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f861da42815940a081e14aa9c49d020, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _name: 3
-  _surroundings: 0200000004000000
+  _name: 4
+  _surroundings: 0300000005000000
 --- !u!64 &201185250
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -8673,8 +8674,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f861da42815940a081e14aa9c49d020, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _name: 6
-  _surroundings: 000000000100000005000000
+  _name: 7
+  _surroundings: 010000000200000006000000
 --- !u!1001 &904902228
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11387,37 +11388,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   areas:
-  - zone: 4
+  - zone: 5
     scoreRed: {fileID: 262749630}
     scoreBlue: {fileID: 656603348}
     scoreGreen: {fileID: 533961538}
     scoreYellow: {fileID: 860259524}
-  - zone: 5
+  - zone: 6
     scoreRed: {fileID: 542766646}
     scoreBlue: {fileID: 1955646171}
     scoreGreen: {fileID: 1048788906}
     scoreYellow: {fileID: 2071317156}
-  - zone: 3
+  - zone: 4
     scoreRed: {fileID: 640431490}
     scoreBlue: {fileID: 1947331198}
     scoreGreen: {fileID: 1613963505}
     scoreYellow: {fileID: 938760693}
-  - zone: 2
+  - zone: 3
     scoreRed: {fileID: 499186878}
     scoreBlue: {fileID: 1732343927}
     scoreGreen: {fileID: 1454711861}
     scoreYellow: {fileID: 1154541285}
-  - zone: 1
+  - zone: 2
     scoreRed: {fileID: 623158865}
     scoreBlue: {fileID: 1190627408}
     scoreGreen: {fileID: 1476402806}
     scoreYellow: {fileID: 2129371346}
-  - zone: 0
+  - zone: 1
     scoreRed: {fileID: 1144093313}
     scoreBlue: {fileID: 1915165527}
     scoreGreen: {fileID: 1922018496}
     scoreYellow: {fileID: 1882557964}
-  - zone: 6
+  - zone: 7
     scoreRed: {fileID: 577433469}
     scoreBlue: {fileID: 106803788}
     scoreGreen: {fileID: 1987311096}
@@ -11436,28 +11437,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   units:
   - _character: {fileID: 11400000, guid: 4accadf6fd4d7964eb177c11aac2fb05, type: 2}
-    _area: 3
-    _numberOfUnits: 2
-  - _character: {fileID: 11400000, guid: 4accadf6fd4d7964eb177c11aac2fb05, type: 2}
     _area: 4
     _numberOfUnits: 2
   - _character: {fileID: 11400000, guid: 4accadf6fd4d7964eb177c11aac2fb05, type: 2}
-    _area: 0
+    _area: 5
     _numberOfUnits: 2
   - _character: {fileID: 11400000, guid: 4accadf6fd4d7964eb177c11aac2fb05, type: 2}
-    _area: 6
+    _area: 1
+    _numberOfUnits: 2
+  - _character: {fileID: 11400000, guid: 4accadf6fd4d7964eb177c11aac2fb05, type: 2}
+    _area: 7
     _numberOfUnits: 2
   - _character: {fileID: 11400000, guid: e1c32b92d86a9c64788664506c47abf2, type: 2}
-    _area: 0
+    _area: 1
     _numberOfUnits: 2
   - _character: {fileID: 11400000, guid: e1c32b92d86a9c64788664506c47abf2, type: 2}
-    _area: 4
+    _area: 5
     _numberOfUnits: 2
   - _character: {fileID: 11400000, guid: 6d07d7610a19c2948a282dd2a7836eee, type: 2}
-    _area: 3
+    _area: 4
     _numberOfUnits: 2
   - _character: {fileID: 11400000, guid: 7cfea36ee87a3fd4586acc3350d35cd6, type: 2}
-    _area: 6
+    _area: 7
     _numberOfUnits: 2
   troopsManagerUI: {fileID: 1053198084}
   zones:
@@ -11800,8 +11801,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f861da42815940a081e14aa9c49d020, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _name: 0
-  _surroundings: 0600000001000000
+  _name: 1
+  _surroundings: 0700000002000000
 --- !u!1 &1144093311
 GameObject:
   m_ObjectHideFlags: 0
@@ -15676,8 +15677,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f861da42815940a081e14aa9c49d020, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _name: 4
-  _surroundings: 030000000200000005000000
+  _name: 5
+  _surroundings: 040000000300000006000000
 --- !u!114 &1631656950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15844,8 +15845,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f861da42815940a081e14aa9c49d020, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _name: 5
-  _surroundings: 06000000010000000200000004000000
+  _name: 6
+  _surroundings: 07000000020000000300000005000000
 --- !u!64 &1664447931
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -19685,8 +19686,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f861da42815940a081e14aa9c49d020, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _name: 1
-  _surroundings: 00000000060000000500000002000000
+  _name: 2
+  _surroundings: 01000000070000000600000003000000
 --- !u!1 &2088643612
 GameObject:
   m_ObjectHideFlags: 0

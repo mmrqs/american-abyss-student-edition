@@ -107,6 +107,7 @@
           </e>
         </e>
         <e p="Scripts" t="Include">
+          <e p="ActionSimulation.cs" t="Include" />
           <e p="AI.cs" t="Include" />
           <e p="Area.cs" t="Include" />
           <e p="AreaManager.cs" t="Include" />
