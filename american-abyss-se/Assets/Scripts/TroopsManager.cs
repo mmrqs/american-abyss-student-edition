@@ -28,19 +28,22 @@ public class TroopsManager : MonoBehaviour
 
     public void MoveUnit(Character character, Area startingArea, Area endArea, int numberOfUnitsToMove)
     {
+        Debug.Log(numberOfUnitsToMove);
         units.Find(u => u.Character.Name == character.Name && u.Area == startingArea).NumberOfUnits -= numberOfUnitsToMove;
         
         if(!units.Exists(b => b.Character.Name == character.Name && b.Area == endArea))
             units.Add(new Battalion(character, endArea));
         units.Find(u => u.Character.Name == character.Name && u.Area == endArea).NumberOfUnits += numberOfUnitsToMove;
-        
+        Debug.Log(units.Find(u => u.Character.Name == character.Name && u.Area == endArea).NumberOfUnits);
         troopsManagerUI.BuildUI(units);
     }
 
     public void RemoveUnit(Character character, Area area)
     {
+        Debug.Log(units.Find(u => u.Character == character && u.Area == area).NumberOfUnits);
         if(units.Find(u => u.Character == character && u.Area == area).NumberOfUnits > 0)
             units.Find(u => u.Character == character && u.Area == area).NumberOfUnits -= 1;
+
         troopsManagerUI.BuildUI(units);
     }
 
@@ -64,7 +67,15 @@ public class TroopsManager : MonoBehaviour
 
     public List<Zone> GetZonesWhereCharacterHasUnits(Character character)
     {
-        List<Area> areas = units.Where(b => b.Character.Name == character.Name)
+        List<Area> areas = units.Where(b => b.Character.Name == character.Name && b.NumberOfUnits > 0)
+            .Select(u => u.Area)
+            .ToList();
+        return GetZones(areas);
+    }
+    
+    public List<Zone> GetZonesWhereCharacterHasCertainAmountOfUnits(Character character, int nb)
+    {
+        List<Area> areas = units.Where(b => b.Character.Name == character.Name && b.NumberOfUnits > nb)
             .Select(u => u.Area)
             .ToList();
         return GetZones(areas);
@@ -125,15 +136,23 @@ public class TroopsManager : MonoBehaviour
 
     public Character GetMaster(Zone zone)
     {
+        int bestVal = 0;
         Battalion result = null;
         
         foreach (var battalion in units.FindAll(b => b.Area == zone.Name))
         {
-            if(result == null && battalion.NumberOfUnits > 0)
+            if (result == null && battalion.NumberOfUnits > 0 && battalion.NumberOfUnits > bestVal)
+            {
                 result = battalion;
-            else if (result != null && result.NumberOfUnits < battalion.NumberOfUnits)
+                bestVal = battalion.NumberOfUnits;
+            }
+            else if (result != null && result.NumberOfUnits < battalion.NumberOfUnits &&
+                     battalion.NumberOfUnits > bestVal)
+            {
                 result = battalion;
-            else if(result != null && result.NumberOfUnits == battalion.NumberOfUnits)
+                bestVal = battalion.NumberOfUnits;
+            }
+            else if (result != null && result.NumberOfUnits == battalion.NumberOfUnits)
                 result = null;
         }
         return result?.Character;

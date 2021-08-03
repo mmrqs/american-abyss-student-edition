@@ -19,6 +19,8 @@ public class AreaManager : MonoBehaviour
     private bool test;
 
     public List<Area> AllowedZones { get; set; }
+    
+    public int NbOfUnitsToMove { get; set; }
     public int NumberOfUnits { get; set; }
     
     public List<Area> ActingZones { get; set; }
@@ -72,7 +74,9 @@ public class AreaManager : MonoBehaviour
                         flashing2 = StartCoroutine(LightZones(troopManager
                             .GetSurroundingZonesInPerimeter(gameManager.Character.MovingZoneDistance, ActingZones[0])));
                         
-                        movingTroopsUI.BuildUI(troopManager.GetNumberOfUnitsInArea(ActingZones[0], gameManager.Character));
+                        movingTroopsUI.BuildUI(gameManager.Character.Name == " President Blue" ? 
+                            troopManager.GetNumberOfUnitsInArea(ActingZones[0], gameManager.Character) - 1 
+                            : troopManager.GetNumberOfUnitsInArea(ActingZones[0], gameManager.Character));
                     }
                     if(gameManager.CurrentMode == Mode.MOVE && ActingZones.Count == 2)
                         MoveTroop(ActingZones[0], ActingZones[1]);
@@ -130,8 +134,8 @@ public class AreaManager : MonoBehaviour
     {
         if (character == null)
             character = gameManager.Character;
-        troopManager.MoveUnit(character, startingZone, endingZone, movingTroopsUI.Number);
-        StopCoroutine(flashing2);
+        troopManager.MoveUnit(character, startingZone, endingZone, movingTroopsUI.Number > NbOfUnitsToMove ? movingTroopsUI.Number : NbOfUnitsToMove);
+        StopFlashing();
         movingTroopsUI.Init();
         Init();
         gameManager.NextAction();
@@ -167,6 +171,7 @@ public class AreaManager : MonoBehaviour
         choosen = false;
         ResetColors();
         gameManager.CurrentMode = Mode.DEFAULT;
+        NbOfUnitsToMove = 1;
     }
 
     public void InitMovingTroops()

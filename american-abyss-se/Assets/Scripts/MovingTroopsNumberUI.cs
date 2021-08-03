@@ -45,16 +45,8 @@ public class MovingTroopsNumberUI : MonoBehaviour
 
     private void CheckButtons()
     {
-        if(number <= 0)
-            minusButton.gameObject.SetActive(false);
-        
-        if(number >= maxUnits)
-            plusButton.gameObject.SetActive(false);
-        
-        if (number <= 0 || number >= maxUnits) return;
-        
-        minusButton.gameObject.SetActive(true);
-        plusButton.gameObject.SetActive(true);
+        minusButton.gameObject.SetActive(number > 1);
+        plusButton.gameObject.SetActive(number < maxUnits);
     }
 
     public void Init()

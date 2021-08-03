@@ -6,6 +6,7 @@ using UnityEngine;
 [Serializable]
 public enum Area
 {
+    FOO,
     NORTHWEST,
     NORTH_CENTRAL,
     MIDWEST,

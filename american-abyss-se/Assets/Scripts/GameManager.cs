@@ -34,6 +34,8 @@ public class GameManager : MonoBehaviour
     private bool recruiting = false;
     private bool moving = false;
     private bool fighting = false;
+    public Area areaOfFight;
+    public int superPowerBlue;
     
     public Mode CurrentMode
     {
@@ -79,6 +81,9 @@ public class GameManager : MonoBehaviour
         currentCharacter = characters[index];
         if (currentCharacter.Name == "Dr. Green")
             currentCharacter.AmountOfMoneyToHave -= troopManager.GetTotalNumberOfUnitsInField(currentCharacter);
+        
+        if (currentCharacter.Name == " President Blue")
+            superPowerBlue = 2;
         
         characterName.SetText(currentCharacter.Name);
         recruitment.enabled = true;
@@ -169,38 +174,50 @@ public class GameManager : MonoBehaviour
 
     public void InitiateFight(Area area, Character character)
     {
-        Debug.Log(area);
         Random rnd = new Random();
         int die = rnd.Next(1, 7);
         string message = "";
 
-        Character loosing;
+        Character winner;
+        Character looser;
         if (die <= troopManager.GetNumberOfUnitsInArea(area, currentCharacter))
         {
             //troopManager.RemoveUnit(character, area);
             for(var i = 0; i < currentCharacter.NumberOfTroopsDestroyed; i++)
                 troopManager.RemoveUnit(character, area);
             areaManager.NumberOfUnits = troopManager.GetNumberOfUnitsInArea(area, character);
-            loosing = character;
+            winner = currentCharacter;
+            looser = character;
         }
         else
         {
             troopManager.RemoveUnit(currentCharacter, area);
             areaManager.NumberOfUnits = troopManager.GetNumberOfUnitsInArea(area, currentCharacter);
-            loosing = currentCharacter;
+            winner = character;
+            looser = currentCharacter;
         }
-        
-        fightingPopUpUI.BuildUI(currentCharacter.Name, character.Name, die, loosing.Name, currentCharacter.NumberOfTroopsDestroyed);
 
-        if (troopManager.GetNumberOfUnitsInArea(area, loosing) != 0)
+        fightingPopUpUI.BuildUI(currentCharacter.Name, character.Name, die, winner.Name, currentCharacter.NumberOfTroopsDestroyed);
+        
+        if (troopManager.GetNumberOfUnitsInArea(area, looser) != 0)
         {
-            areaManager.character = loosing;
+            areaManager.character = looser;
             areaManager.ActingZones.Add(area);
-            areaManager.StartFlashing(areaManager.troopManager.GetZones(areaManager.troopManager.GetZone(area).Surroundings));
-            CurrentMode = Mode.MOVE;
+            areaManager.NbOfUnitsToMove = troopManager.GetNumberOfUnitsInArea(area, looser);
+            areaOfFight = area;
         }
         attackingButton.gameObject.SetActive(false);
         skipButton.gameObject.SetActive(false);
+    }
+
+    public void afterFight()
+    {
+        if (areaOfFight != Area.FOO)
+        {
+            areaManager.StartFlashing(areaManager.troopManager.GetZones(areaManager.troopManager.GetZone(areaOfFight).Surroundings));
+            CurrentMode = Mode.MOVE;
+            areaOfFight = Area.FOO;   
+        }
     }
     
     public void MoveUnits()
@@ -210,7 +227,9 @@ public class GameManager : MonoBehaviour
             moving = true;
             DisplayMessagePopUp("Select an area where you want your troops to move.");
             CurrentMode = Mode.MOVE;
-            List<Zone> zones = troopManager.GetZonesWhereCharacterHasUnits(currentCharacter);
+            List<Zone> zones = Character.Name == " President Blue" ? 
+                troopManager.GetZonesWhereCharacterHasCertainAmountOfUnits(currentCharacter, 1) : 
+                troopManager.GetZonesWhereCharacterHasUnits(currentCharacter);
             areaManager.StartFlashing(zones);   
         }
     }

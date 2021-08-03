@@ -10,6 +10,7 @@ public class FightingPopUpUI : MonoBehaviour
     public TMPro.TMP_Text scoreText;
     public TMPro.TMP_Text winnerText;
     public TMPro.TMP_Text troopsDestroyedText;
+    public GameManager gameManager;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +30,6 @@ public class FightingPopUpUI : MonoBehaviour
     public void Hide()
     {
         this.gameObject.SetActive(false);
+        gameManager.afterFight();
     }
-        
 }
