@@ -14,9 +14,6 @@ public class Character : ScriptableObject, IComparable<Character>
     [SerializeField] protected string _background;
     public string Background => _background;
 
-    [SerializeField] protected Image _image;
-    public Image Image => _image;
-
     [SerializeField] protected int _movingZoneDistance;
     public int MovingZoneDistance => _movingZoneDistance;
     
@@ -34,7 +31,7 @@ public class Character : ScriptableObject, IComparable<Character>
         set => _amountOfMoneyToHave = value;
     }
 
-    [SerializeField] protected Color color;
+    [SerializeField] protected Color32 color;
     public Color Color => color;
 
     [SerializeField] protected string aim;
@@ -42,7 +39,7 @@ public class Character : ScriptableObject, IComparable<Character>
 
     public override string ToString()
     {
-        return $"{base.ToString()}, {nameof(Name)}: {Name}, {nameof(NumberOfUnits)}: {NumberOfUnits}, {nameof(Background)}: {Background}, {nameof(Image)}: {Image}, {nameof(MovingZoneDistance)}: {MovingZoneDistance}, {nameof(NumberOfTroopsDestroyed)}: {NumberOfTroopsDestroyed}, {nameof(NbOfTerritoriesToControl)}: {NbOfTerritoriesToControl}, {nameof(AmountOfMoneyToHave)}: {AmountOfMoneyToHave}, {nameof(Color)}: {Color}, {nameof(Aim)}: {Aim}";
+        return $"{base.ToString()}, {nameof(Name)}: {Name}, {nameof(NumberOfUnits)}: {NumberOfUnits}, {nameof(Background)}: {Background}, {nameof(MovingZoneDistance)}: {MovingZoneDistance}, {nameof(NumberOfTroopsDestroyed)}: {NumberOfTroopsDestroyed}, {nameof(NbOfTerritoriesToControl)}: {NbOfTerritoriesToControl}, {nameof(AmountOfMoneyToHave)}: {AmountOfMoneyToHave}, {nameof(Color)}: {Color}, {nameof(Aim)}: {Aim}";
     }
 
     public int CompareTo(Character obj)

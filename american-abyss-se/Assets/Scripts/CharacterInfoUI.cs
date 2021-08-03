@@ -7,9 +7,7 @@ public class CharacterInfoUI : MonoBehaviour
     public TMPro.TMP_Text garison;
 
     public TMPro.TMP_Text controlledAreas;
-
-    public Image photo;
-
+    
     public TMPro.TMP_Text characterName;
     
     public TMPro.TMP_Text victoryPercentage;
@@ -33,7 +31,7 @@ public class CharacterInfoUI : MonoBehaviour
         BuildUI();
     }
 
-    public void BuildUI()
+    private void BuildUI()
     {
         garison.SetText(GetGarrison());
         controlledAreas.SetText(GetControlledAreas());

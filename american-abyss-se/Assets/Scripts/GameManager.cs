@@ -31,6 +31,10 @@ public class GameManager : MonoBehaviour
     
     private Mode currentMode;
     
+    private bool recruiting = false;
+    private bool moving = false;
+    private bool fighting = false;
+    
     public Mode CurrentMode
     {
         get => currentMode;
@@ -88,6 +92,9 @@ public class GameManager : MonoBehaviour
         skipButton.gameObject.SetActive(true);
         CheckEndGame();
         areaManager.Init();
+        recruiting = false;
+        moving = false;
+        fighting = false;
     }
 
     public void NextAction()
@@ -97,7 +104,6 @@ public class GameManager : MonoBehaviour
         {
             recruitment.gameObject.SetActive(false);
             movingButton.gameObject.SetActive(true);
-            Debug.Log("tameere");
         } else if (movingButton.IsActive())
         {
             attackingButton.gameObject.SetActive(true);
@@ -107,39 +113,58 @@ public class GameManager : MonoBehaviour
             attackingButton.gameObject.SetActive(false);
             skipButton.gameObject.SetActive(false);
         }
-        //
+        recruiting = false;
+        moving = false;
+        fighting = false;
         areaManager.Init();
+    }
+
+    public void CancelAction()
+    {
+        recruiting = false;
+        moving = false;
+        fighting = false;
+        areaManager.Init();
+        areaManager.InitMovingTroops();
     }
 
     public void Recruit()
     {
-        int numberOfUnits = troopManager.GetTotalNumberOfUnitsInField(Character);
-        
-        if (currentCharacter.NumberOfUnits > numberOfUnits)
+        if (!recruiting)
         {
-            DisplayMessagePopUp("Select an area to place your new unit.");
+            recruiting = true;
+            int numberOfUnits = troopManager.GetTotalNumberOfUnitsInField(Character);
+        
+            if (currentCharacter.NumberOfUnits > numberOfUnits)
+            {
+                DisplayMessagePopUp("Select an area to place your new unit.");
 
-            //recruitment.enabled = false;
-            List<Zone> zones = troopManager.GetZonesWhereCharacterHasUnits(currentCharacter);
-            if (zones.Count == 0)
-                zones = troopManager.GetAllZones();
-            areaManager.StartFlashing(zones);
-            CurrentMode = Mode.RECRUIT;
+                //recruitment.enabled = false;
+                List<Zone> zones = troopManager.GetZonesWhereCharacterHasUnits(currentCharacter);
+                if (zones.Count == 0)
+                    zones = troopManager.GetAllZones();
+                areaManager.StartFlashing(zones);
+                CurrentMode = Mode.RECRUIT;
+            }
         }
     }
 
     public void Attack()
     {
-        DisplayMessagePopUp("Select an area to attack.");
-        CurrentMode = Mode.ATTACK;
-        areaManager.AllowedZones = troopManager.units
-            .Where(u => u.Character == currentCharacter && troopManager.GetCharactersInZone(u.Area).Count > 1)
-            .Select(u => u.Area)
-            .ToList();
-        List<Zone> zones = troopManager.GetZonesWhereCharacterHasUnits(currentCharacter);
-        zones = zones.Where(z => troopManager.GetCharactersInZone(z.Name).Count > 1).ToList();
-        if (zones.Count != 0)
-            areaManager.StartFlashing(zones);
+        if (!fighting)
+        {
+            fighting = true;
+            DisplayMessagePopUp("Select an area to attack.");
+            CurrentMode = Mode.ATTACK;
+            areaManager.AllowedZones = troopManager.units
+                .Where(u => u.Character == currentCharacter && troopManager.GetCharactersInZone(u.Area).Count > 1)
+                .Select(u => u.Area)
+                .ToList();
+            List<Zone> zones = troopManager.GetZonesWhereCharacterHasUnits(currentCharacter);
+            zones = zones.Where(z => troopManager.GetCharactersInZone(z.Name).Count > 1).ToList();
+            if (zones.Count != 0)
+                areaManager.StartFlashing(zones);
+        }
     }
 
     public void InitiateFight(Area area, Character character)
@@ -180,10 +205,14 @@ public class GameManager : MonoBehaviour
     
     public void MoveUnits()
     {
-        DisplayMessagePopUp("Select an area where you want your troops to move.");
-        CurrentMode = Mode.MOVE;
-        List<Zone> zones = troopManager.GetZonesWhereCharacterHasUnits(currentCharacter);
-        areaManager.StartFlashing(zones);
+        if (!moving)
+        {
+            moving = true;
+            DisplayMessagePopUp("Select an area where you want your troops to move.");
+            CurrentMode = Mode.MOVE;
+            List<Zone> zones = troopManager.GetZonesWhereCharacterHasUnits(currentCharacter);
+            areaManager.StartFlashing(zones);   
+        }
     }
     
     public void DisplayMessagePopUp(string message)

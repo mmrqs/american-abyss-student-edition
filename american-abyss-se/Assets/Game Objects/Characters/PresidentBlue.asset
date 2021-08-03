@@ -15,10 +15,11 @@ MonoBehaviour:
   _name: ' President Blue'
   _numberOfUnits: 12
   _background: 
-  _image: {fileID: 0}
   _movingZoneDistance: 2
   _numberOfTroopsDestroyed: 2
   _nbOfTerritoriesToControl: 4
   _amountOfMoneyToHave: 0
-  color: {r: 0.26666668, g: 0.61960787, b: 0.9607844, a: 0}
+  color:
+    serializedVersion: 2
+    rgba: 16096836
   aim: save the government and keep control of America.

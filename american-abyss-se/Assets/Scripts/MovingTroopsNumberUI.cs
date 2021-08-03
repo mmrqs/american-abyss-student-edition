@@ -21,10 +21,9 @@ public class MovingTroopsNumberUI : MonoBehaviour
         Init();        
     }
 
-    public void BuildUI(Vector3 position, int max)
+    public void BuildUI(int max)
     {
         maxUnits = max;
-        gameObject.transform.position = position;
         victoryText.SetText(number.ToString(CultureInfo.InvariantCulture));
         gameObject.SetActive(true);
         CheckButtons();

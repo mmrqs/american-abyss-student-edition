@@ -72,7 +72,7 @@ public class AreaManager : MonoBehaviour
                         flashing2 = StartCoroutine(LightZones(troopManager
                             .GetSurroundingZonesInPerimeter(gameManager.Character.MovingZoneDistance, ActingZones[0])));
                         
-                        movingTroopsUI.BuildUI(Input.mousePosition, troopManager.GetTotalNumberOfUnitsInField(gameManager.Character));
+                        movingTroopsUI.BuildUI(troopManager.GetNumberOfUnitsInArea(ActingZones[0], gameManager.Character));
                     }
                     if(gameManager.CurrentMode == Mode.MOVE && ActingZones.Count == 2)
                         MoveTroop(ActingZones[0], ActingZones[1]);
@@ -149,6 +149,12 @@ public class AreaManager : MonoBehaviour
             StopCoroutine(Flashing);
             Flashing = null;
         }
+
+        if (flashing2 != null)
+        {
+            StopCoroutine(flashing2);
+            flashing2 = null;
+        }
     }
     
     public void Init()
@@ -161,5 +167,10 @@ public class AreaManager : MonoBehaviour
         choosen = false;
         ResetColors();
         gameManager.CurrentMode = Mode.DEFAULT;
+    }
+
+    public void InitMovingTroops()
+    {
+        movingTroopsUI.Init();
     }
 }
