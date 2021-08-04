@@ -57,7 +57,7 @@ public class AdverserInfoUI : MonoBehaviour
                     break;
                 case "Dr. Green":
                     images[i].GetComponent<Image>().color = Color.green;
-                    money[i].SetText(Convert.ToString(15 - gameManager.characters[(index + (i + 1)) % gameManager.characters.Count].AmountOfMoneyToHave + "K/"
+                    money[i].SetText(Convert.ToString(gameManager.moneyGreen + "K/"
                         + "15K"));
                     money[i].gameObject.SetActive(true);
                     moneyImage[i].gameObject.SetActive(true);

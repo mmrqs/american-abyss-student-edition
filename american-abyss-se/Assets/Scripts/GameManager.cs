@@ -35,7 +35,9 @@ public class GameManager : MonoBehaviour
     private bool moving = false;
     private bool fighting = false;
     public Area areaOfFight;
+    
     public int superPowerBlue;
+    public int moneyGreen;
     
     public Mode CurrentMode
     {
@@ -49,6 +51,7 @@ public class GameManager : MonoBehaviour
     public bool test = false;
     void Start()
     {
+        moneyGreen = 0;
         if (characters == null)
             throw new Exception("Empty character list");
         recruitMessage.gameObject.SetActive(false);
@@ -79,8 +82,9 @@ public class GameManager : MonoBehaviour
             index = 0;
 
         currentCharacter = characters[index];
+        
         if (currentCharacter.Name == "Dr. Green")
-            currentCharacter.AmountOfMoneyToHave -= troopManager.GetTotalNumberOfUnitsInField(currentCharacter);
+            CalculateMoneyGreen();
         
         if (currentCharacter.Name == " President Blue")
             superPowerBlue = 2;
@@ -100,6 +104,11 @@ public class GameManager : MonoBehaviour
         recruiting = false;
         moving = false;
         fighting = false;
+    }
+
+    private void CalculateMoneyGreen()
+    {
+        moneyGreen += troopManager.GetTotalNumberOfUnitsInField(currentCharacter);
     }
 
     public void NextAction()
@@ -280,7 +289,7 @@ public class GameManager : MonoBehaviour
         switch (character.Name)
         {
             case "Agent Yellow":
-                percentage = (troopManager.GetTotalNumberOfUnitsInField(character)
+                percentage = ((troopManager.GetTotalNumberOfUnitsInField(character) - 1)
                               / (float)troopManager.GetTotalNumberOfUnitsInField(
                                   characters.Find(c => c.Name == "Colonel Red"))) * 100;
                 break;
@@ -289,8 +298,11 @@ public class GameManager : MonoBehaviour
                                troopManager.GetTotalNumberOfUnitsInField(character)) / (float)character.NbOfTerritoriesToControl) * 100;
                 break;
             case "Dr. Green":
-                percentage = ((15 - character.AmountOfMoneyToHave) / 30) * 100 + ((troopManager.GetTotalControlledZones(character) +
-                    troopManager.GetTotalNumberOfUnitsInField(character)) / (float)character.NbOfTerritoriesToControl) * 100 / 2;
+                float m = moneyGreen > 15 ? 15 : moneyGreen;
+                float n = troopManager.GetZonesWhereCharacterHasUnits(character).Count > 4
+                    ? 4
+                    : troopManager.GetZonesWhereCharacterHasUnits(character).Count;
+                percentage = (((float)(m) / (float)30) * 100) + (((float)n/(float)8) * 100);
                 break;
             case " President Blue":
                 percentage = (troopManager.GetTotalControlledZones(character) / (float)character.NbOfTerritoriesToControl) * 100;

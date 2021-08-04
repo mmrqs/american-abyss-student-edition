@@ -57,7 +57,7 @@ public class CharacterInfoUI : MonoBehaviour
     private string GetAmountOfMoney()
     {
         gameObjectMoney.SetActive(true);
-        return Convert.ToString(15 - gameManager.Character.AmountOfMoneyToHave)
+        return Convert.ToString(gameManager.moneyGreen)
                + "K / "
                + "15K";
     }
