@@ -72,14 +72,21 @@ public class AreaManager : MonoBehaviour
                         
                         gameManager.DisplayMessagePopUp("Choose a zone to move your unit");
                         flashing2 = StartCoroutine(LightZones(troopManager
-                            .GetSurroundingZonesInPerimeter(gameManager.Character.MovingZoneDistance, ActingZones[0])));
+                            .GetSurroundingZonesInPerimeter(gameManager.Character.Name == " President Blue" ? 
+                                gameManager.superPowerBlue : gameManager.Character.MovingZoneDistance, ActingZones[0])));
                         
                         movingTroopsUI.BuildUI(gameManager.Character.Name == " President Blue" ? 
                             troopManager.GetNumberOfUnitsInArea(ActingZones[0], gameManager.Character) - 1 
                             : troopManager.GetNumberOfUnitsInArea(ActingZones[0], gameManager.Character));
                     }
-                    if(gameManager.CurrentMode == Mode.MOVE && ActingZones.Count == 2)
+
+                    if (gameManager.CurrentMode == Mode.MOVE && ActingZones.Count == 2)
+                    {
+                        if (gameManager.Character.Name == " President Blue")
+                            gameManager.superPowerBlue -=
+                                troopManager.GetDistanceBetweenTwoZones(ActingZones[0], ActingZones[1]);
                         MoveTroop(ActingZones[0], ActingZones[1]);
+                    }
                 }
             }
             
@@ -89,7 +96,6 @@ public class AreaManager : MonoBehaviour
     private IEnumerator LightZones(List<Zone> zones)
     {
         ColorsZones = zones;
-        // we change the color
         while (!choosen)
         {
             foreach (var zone in zones)
@@ -138,7 +144,10 @@ public class AreaManager : MonoBehaviour
         StopFlashing();
         movingTroopsUI.Init();
         Init();
+        if (gameManager.Character.Name == " President Blue" && gameManager.superPowerBlue > 0)
+            return;
         gameManager.NextAction();
+        gameManager.moving = true;
     }
 
     public void StartFlashing(List<Zone> zones)

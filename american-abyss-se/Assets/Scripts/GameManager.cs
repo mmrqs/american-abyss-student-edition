@@ -32,12 +32,13 @@ public class GameManager : MonoBehaviour
     private Mode currentMode;
     
     private bool recruiting = false;
-    private bool moving = false;
+    public bool moving = false;
     private bool fighting = false;
     public Area areaOfFight;
     
     public int superPowerBlue;
     public int moneyGreen;
+    private bool firstTurn;
     
     public Mode CurrentMode
     {
@@ -55,13 +56,10 @@ public class GameManager : MonoBehaviour
         if (characters == null)
             throw new Exception("Empty character list");
         recruitMessage.gameObject.SetActive(false);
-
-        // we make the order of player random
-        Random rng = new Random();
-        characters = characters.OrderBy(a => rng.Next()).ToList();
+        firstTurn = true;
         NextTurn();
-        
-        
+        test = false;
+
     }
 
     void Update()
@@ -73,18 +71,20 @@ public class GameManager : MonoBehaviour
             ai.test(Character, boardCopy, characters);
             test = true;
         }*/
-        
     }
 
     public void NextTurn()
     {
         if (index >= characters.Count)
             index = 0;
-
-        currentCharacter = characters[index];
         
-        if (currentCharacter.Name == "Dr. Green")
-            CalculateMoneyGreen();
+        currentCharacter = characters[index];
+        if (!firstTurn)
+        {
+            if (characters[((characters.IndexOf(currentCharacter) - 1) % characters.Count + characters.Count)% characters.Count].Name == "Dr. Green")
+                CalculateMoneyGreen();
+        }
+
         
         if (currentCharacter.Name == " President Blue")
             superPowerBlue = 2;
@@ -104,6 +104,7 @@ public class GameManager : MonoBehaviour
         recruiting = false;
         moving = false;
         fighting = false;
+        firstTurn = false;
     }
 
     private void CalculateMoneyGreen()
@@ -153,7 +154,6 @@ public class GameManager : MonoBehaviour
             {
                 DisplayMessagePopUp("Select an area to place your new unit.");
 
-                //recruitment.enabled = false;
                 List<Zone> zones = troopManager.GetZonesWhereCharacterHasUnits(currentCharacter);
                 if (zones.Count == 0)
                     zones = troopManager.GetAllZones();
@@ -174,8 +174,9 @@ public class GameManager : MonoBehaviour
                 .Where(u => u.Character == currentCharacter && troopManager.GetCharactersInZone(u.Area).Count > 1)
                 .Select(u => u.Area)
                 .ToList();
-            List<Zone> zones = troopManager.GetZonesWhereCharacterHasUnits(currentCharacter);
-            zones = zones.Where(z => troopManager.GetCharactersInZone(z.Name).Count > 1).ToList();
+            var zones = troopManager.GetZonesWhereCharacterHasUnits(currentCharacter)
+                .Where(z => troopManager.GetCharactersInZone(z.Name).Count > 1)
+                .ToList();
             if (zones.Count != 0)
                 areaManager.StartFlashing(zones);
         }
@@ -233,7 +234,6 @@ public class GameManager : MonoBehaviour
     {
         if (!moving)
         {
-            moving = true;
             DisplayMessagePopUp("Select an area where you want your troops to move.");
             CurrentMode = Mode.MOVE;
             List<Zone> zones = Character.Name == " President Blue" ? 
@@ -250,7 +250,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(FadeCanvasGroup(recruitMessage, recruitMessage.alpha, 0));
     }
 
-    public IEnumerator FadeCanvasGroup(CanvasGroup cg, float start, float end, float lerpTime = 1)
+    private IEnumerator FadeCanvasGroup(CanvasGroup cg, float start, float end, float lerpTime = 1)
     {
         yield return new WaitForSeconds(1.5f);
         var startingTime = Time.time;
@@ -295,7 +295,7 @@ public class GameManager : MonoBehaviour
                 break;
             case "Colonel Red":
                 percentage = ((troopManager.GetTotalControlledZones(character) +
-                               troopManager.GetTotalNumberOfUnitsInField(character)) / (float)character.NbOfTerritoriesToControl) * 100;
+                               troopManager.GetTotalNumberOfUnitsInField(character)) / ((float)character.NbOfTerritoriesToControl + 1)) * 100;
                 break;
             case "Dr. Green":
                 float m = moneyGreen > 15 ? 15 : moneyGreen;

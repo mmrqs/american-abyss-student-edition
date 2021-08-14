@@ -6,7 +6,6 @@ using UnityEngine;
 public class TroopsManager : MonoBehaviour
 {
     public List<Battalion> units;
-    public List<Battalion> Units => units;
     public TroopsManagerUI troopsManagerUI;
     public List<Zone> zones;
     
@@ -28,13 +27,11 @@ public class TroopsManager : MonoBehaviour
 
     public void MoveUnit(Character character, Area startingArea, Area endArea, int numberOfUnitsToMove)
     {
-        Debug.Log(numberOfUnitsToMove);
         units.Find(u => u.Character.Name == character.Name && u.Area == startingArea).NumberOfUnits -= numberOfUnitsToMove;
         
         if(!units.Exists(b => b.Character.Name == character.Name && b.Area == endArea))
             units.Add(new Battalion(character, endArea));
         units.Find(u => u.Character.Name == character.Name && u.Area == endArea).NumberOfUnits += numberOfUnitsToMove;
-        Debug.Log(units.Find(u => u.Character.Name == character.Name && u.Area == endArea).NumberOfUnits);
         troopsManagerUI.BuildUI(units);
     }
 
@@ -44,12 +41,6 @@ public class TroopsManager : MonoBehaviour
         if(units.Find(u => u.Character == character && u.Area == area).NumberOfUnits > 0)
             units.Find(u => u.Character == character && u.Area == area).NumberOfUnits -= 1;
 
-        troopsManagerUI.BuildUI(units);
-    }
-
-    public void RemoveAllUnitsOfCharacterFromZone(Character character, Area area)
-    {
-        units.Find(u => u.Character == character && u.Area == area).NumberOfUnits = 0;
         troopsManagerUI.BuildUI(units);
     }
 
@@ -105,6 +96,17 @@ public class TroopsManager : MonoBehaviour
                 result.UnionWith(GetZone(area).Surroundings);
         result.Remove(startingZone);
         return GetZones(result.ToList());
+    }
+
+    public int GetDistanceBetweenTwoZones(Area area1, Area area2)
+    {
+        for (var i = 1; i < 3; i++)
+        {
+            Debug.Log(GetSurroundingZonesInPerimeter(i, area1));
+            if (GetSurroundingZonesInPerimeter(i, area1).Contains(GetZone(area2)))
+                return i;
+        }
+        return 0;
     }
 
     public int GetTotalNumberOfUnitsInField(Character character)

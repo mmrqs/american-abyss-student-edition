@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
-using Unity.Collections.LowLevel.Unsafe;
 using Debug = UnityEngine.Debug;
 
 public class Transition
@@ -342,13 +340,13 @@ public class AI
                 }
             });
         });
-        
-        // Mouvement
+        var presidentBlueConstraint = player.Name == " President Blue" ? 1 : 0;
+        // Movement
         foreach (var a in result.Reverse<Action>())
         {
             GetZonesWhereCharacterHasUnits(player, a.GetBoard()).ForEach(z =>
             {
-                for(int i = 1; i <= GetNumberOfUnitsInArea(z, player, a.GetBoard()); i++)
+                for(int i = 1; i <= GetNumberOfUnitsInArea(z, player, a.GetBoard()) - presidentBlueConstraint; i++)
                 {
                     // added for perfs issues : on bouge si on ne perd pas le contrôle de la zone d'où on vient
                     if (!SimulationIfControlsArea(player, a.GetBoard(), z, -i) && 
@@ -408,25 +406,26 @@ public class AI
         return result;
     }
 
-    private static int cnt = 0;
+    private static ulong cnt = 0;
     private float Maxn(Board board, int depth, Character player, int n)
     {
         cnt++;
+        if (player.Name == simulatedPlayer.Name)
+            depth -= 1;
+        
         float score = GetCharacterEvaluation(player, board);
         int nextN = (n + 1) % (Characters.Count);
-        if (score >= 100 || score <= -100 || player.Name == SimulatedPlayer.Name)
+        if (score >= 100 || score <= -100 || depth == 0)
             return score;
         
         float best = -1000;
         
-        var newDepth = depth;
-        newDepth = depth - 1;
         var possibilities = GetAllPossibleMoves(player, board);
         
         foreach (Action move in possibilities)
         {
             float actionValue = move.transitions
-                .Sum(transition => Maxn(transition.board, newDepth, Characters[(nextN) % (Characters.Count)], nextN) * transition.proba);
+                .Sum(transition => Maxn(transition.board, depth, Characters[(nextN) % (Characters.Count)], nextN) * transition.proba);
             best = Math.Max(best, actionValue);
         }
         return best;
@@ -462,13 +461,13 @@ public class AI
         Characters = characters;
         SimulatedPlayer = character;
         
-        Action action = FindBestMove(b, SimulatedPlayer);
+        Action action = FindBestMove(b, simulatedPlayer);
         
         Debug.Log("Recruiting zone : " + action.recruitingZone);
         Debug.Log("Moving zone : " + action.movingZone);
         Debug.Log("Fighting zone : " + action.fightingZone);
-        
-        //Debug.Log(GetAllPossibleMoves(characters.Find(c => c.Name == " President Blue"), b).Count);
+        Debug.Log(cnt);
+        //Debug.Log(GetAllPossibleMoves(simulatedPlayer, b).Count);
         
         stopWatch.Stop();
         // Get the elapsed time as a TimeSpan value.

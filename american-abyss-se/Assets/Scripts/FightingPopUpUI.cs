@@ -29,7 +29,7 @@ public class FightingPopUpUI : MonoBehaviour
     }
     public void Hide()
     {
-        this.gameObject.SetActive(false);
+        gameObject.SetActive(false);
         gameManager.afterFight();
     }
 }

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Object = System.Object;
 
 public class AdverserInfoUI : MonoBehaviour
 {
@@ -17,12 +15,6 @@ public class AdverserInfoUI : MonoBehaviour
     
     public GameManager gameManager;
     public TroopsManager troopsManager;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        //SetColors();
-    }
 
     // Update is called once per frame
     void Update()
@@ -35,11 +27,6 @@ public class AdverserInfoUI : MonoBehaviour
         SetColors();
         SetGarizon();
         SetControledAreas();
-        /*if(gameManager.Character.Name != "Dr. Green")
-            SetMoney(gameManager.characters.FindIndex(i => i.Name == "Dr. Green"));
-        else
-            foreach (var item in money)
-                item.gameObject.SetActive(false);*/
         SetVictoryConditions();
     }
 

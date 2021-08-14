@@ -119,11 +119,9 @@
           <e p="Character.cs" t="Include" />
           <e p="CharacterInfoUI.cs" t="Include" />
           <e p="ChooseFactionUI.cs" t="Include" />
-          <e p="ClonableSO.cs" t="Include" />
           <e p="ColorsZone.cs" t="Include" />
           <e p="FightingPopUpUI.cs" t="Include" />
           <e p="GameManager.cs" t="Include" />
-          <e p="InputManager.cs" t="Include" />
           <e p="Menu" t="Include">
             <e p="MenuManagerUI.cs" t="Include" />
           </e>
