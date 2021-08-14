@@ -37,24 +37,24 @@ public class AdverserInfoUI : MonoBehaviour
         {
             switch (gameManager.characters[(index + (i + 1)) % gameManager.characters.Count].Name)
             {
-                case " President Blue":
+                case Name.PRESIDENT_BLUE:
                     images[i].GetComponent<Image>().color = Color.blue;
                     money[i].gameObject.SetActive(false);
                     moneyImage[i].gameObject.SetActive(false);
                     break;
-                case "Dr. Green":
+                case Name.DR_GREEN:
                     images[i].GetComponent<Image>().color = Color.green;
                     money[i].SetText(Convert.ToString(gameManager.moneyGreen + "K/"
                         + "15K"));
                     money[i].gameObject.SetActive(true);
                     moneyImage[i].gameObject.SetActive(true);
                     break;
-                case "Colonel Red":
+                case Name.COLONEL_RED:
                     images[i].GetComponent<Image>().color = Color.red;
                     money[i].gameObject.SetActive(false);
                     moneyImage[i].gameObject.SetActive(false);
                     break;
-                case "Agent Yellow":
+                case Name.AGENT_YELLOW:
                     images[i].GetComponent<Image>().color = Color.yellow;
                     money[i].gameObject.SetActive(false);
                     moneyImage[i].gameObject.SetActive(false);

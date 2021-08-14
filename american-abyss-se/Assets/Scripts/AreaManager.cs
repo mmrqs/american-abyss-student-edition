@@ -72,17 +72,17 @@ public class AreaManager : MonoBehaviour
                         
                         gameManager.DisplayMessagePopUp("Choose a zone to move your unit");
                         flashing2 = StartCoroutine(LightZones(troopManager
-                            .GetSurroundingZonesInPerimeter(gameManager.Character.Name == " President Blue" ? 
+                            .GetSurroundingZonesInPerimeter(gameManager.Character.Name == Name.PRESIDENT_BLUE ? 
                                 gameManager.superPowerBlue : gameManager.Character.MovingZoneDistance, ActingZones[0])));
                         
-                        movingTroopsUI.BuildUI(gameManager.Character.Name == " President Blue" ? 
+                        movingTroopsUI.BuildUI(gameManager.Character.Name == Name.PRESIDENT_BLUE ? 
                             troopManager.GetNumberOfUnitsInArea(ActingZones[0], gameManager.Character) - 1 
                             : troopManager.GetNumberOfUnitsInArea(ActingZones[0], gameManager.Character));
                     }
 
                     if (gameManager.CurrentMode == Mode.MOVE && ActingZones.Count == 2)
                     {
-                        if (gameManager.Character.Name == " President Blue")
+                        if (gameManager.Character.Name == Name.PRESIDENT_BLUE)
                             gameManager.superPowerBlue -=
                                 troopManager.GetDistanceBetweenTwoZones(ActingZones[0], ActingZones[1]);
                         MoveTroop(ActingZones[0], ActingZones[1]);
@@ -144,7 +144,7 @@ public class AreaManager : MonoBehaviour
         StopFlashing();
         movingTroopsUI.Init();
         Init();
-        if (gameManager.Character.Name == " President Blue" && gameManager.superPowerBlue > 0)
+        if (gameManager.Character.Name == Name.PRESIDENT_BLUE && gameManager.superPowerBlue > 0)
             return;
         gameManager.NextAction();
         gameManager.moving = true;

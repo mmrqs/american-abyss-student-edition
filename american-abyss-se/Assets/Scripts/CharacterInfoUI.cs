@@ -36,7 +36,7 @@ public class CharacterInfoUI : MonoBehaviour
         garison.SetText(GetGarrison());
         controlledAreas.SetText(GetControlledAreas());
         SetVictoryConditions();
-        if(gameManager.Character.Name == "Dr. Green")
+        if(gameManager.Character.Name == Name.DR_GREEN)
             money.SetText(GetAmountOfMoney());
         else
             gameObjectMoney.SetActive(false);

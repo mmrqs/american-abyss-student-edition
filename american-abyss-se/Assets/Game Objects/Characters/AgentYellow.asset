@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 922162062754dd844ac115a669982660, type: 3}
   m_Name: AgentYellow
   m_EditorClassIdentifier: 
-  _name: Agent Yellow
+  _name: 3
   _numberOfUnits: 6
   _background: 
   _movingZoneDistance: 1

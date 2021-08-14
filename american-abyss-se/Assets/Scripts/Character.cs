@@ -5,8 +5,8 @@ using UnityEngine.UI;
 [CreateAssetMenu(menuName = "Character/Character")]
 public class Character : ScriptableObject, IComparable<Character>
 {
-    [SerializeField] protected string _name;
-    public string Name => _name;
+    [SerializeField] protected Name _name;
+    public Name Name => _name;
 
     [SerializeField] protected int _numberOfUnits;
     public int NumberOfUnits => _numberOfUnits;
@@ -47,6 +47,6 @@ public class Character : ScriptableObject, IComparable<Character>
         if (obj == null)
             return 1;
         else
-            return string.Compare(this.Name, obj.Name, StringComparison.Ordinal);
+            return string.Compare(this.Name.GetString(), obj.Name.GetString(), StringComparison.Ordinal);
     }
 }

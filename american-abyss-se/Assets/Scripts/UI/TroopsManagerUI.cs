@@ -13,16 +13,16 @@ public class TroopsManagerUI : MonoBehaviour
             ZoneScoreUI zone = areas.Find(a => a.zone == u.Area);
             switch (u.Character.Name)
             {
-                case "Agent Yellow":
+                case Name.AGENT_YELLOW:
                     zone.scoreYellow.SetText(u.NumberOfUnits.ToString());
                     break;
-                case "Colonel Red":
+                case Name.COLONEL_RED:
                     zone.scoreRed.SetText(u.NumberOfUnits.ToString());
                     break;
-                case "Dr. Green":
+                case Name.DR_GREEN:
                     zone.scoreGreen.SetText(u.NumberOfUnits.ToString());
                     break;
-                case " President Blue":
+                case Name.PRESIDENT_BLUE:
                     zone.scoreBlue.SetText(u.NumberOfUnits.ToString());
                     break;
             }

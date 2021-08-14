@@ -170,7 +170,8 @@ public class AI
     {
         return characters.Select(character => (character, GetCharacterEvaluation(character, board))).ToList();
     }
-    private float GetCharacterEvaluation(Character character, Board board)
+    
+    public float GetVictoryPercentage(Character character, Board board)
     {
         float percentage = 0;
 
@@ -180,25 +181,37 @@ public class AI
         
         switch (character.Name)
         {
-            case "Agent Yellow":
-                percentage = nbUnits / GetTotalNumberOfUnitsInField(characters.Find(c => c.Name == "Colonel Red"), board) * 100;
+            case Name.AGENT_YELLOW:
+                percentage = nbUnits / GetTotalNumberOfUnitsInField(characters.Find(c => c.Name == Name.COLONEL_RED), board) * 100;
                 break;
             
-            case "Colonel Red":
+            case Name.COLONEL_RED:
                 percentage = ((controlledZones + nbUnits) 
                               / (float)character.NbOfTerritoriesToControl) * 100;
                 break;
             
-            case "Dr. Green":
+            case Name.DR_GREEN:
                 percentage = ((15 - character.AmountOfMoneyToHave) / 30) * 100 + ((controlledZones +
                     nbUnits) / (float)character.NbOfTerritoriesToControl) * 100 / 2;
                 break;
-            case " President Blue":
+            case Name.PRESIDENT_BLUE:
                 percentage = (controlledZones / (float)character.NbOfTerritoriesToControl) * 100;
                 break;
         }
-        
         return percentage;
+    }
+    
+    private float GetCharacterEvaluation(Character character, Board board)
+    {
+        float payoff = 0;
+        foreach (var c in characters)
+        {
+            if (c.Name != character.Name && GetCharacterEvaluation(c, board) >= 100)
+                payoff = -100;
+            else if (payoff >= -100) 
+                payoff = GetCharacterEvaluation(c, board);
+        }
+        return payoff;
     }
 
     private int GetNumberOfControlledZones(Character character, Board board)
@@ -340,7 +353,7 @@ public class AI
                 }
             });
         });
-        var presidentBlueConstraint = player.Name == " President Blue" ? 1 : 0;
+        var presidentBlueConstraint = player.Name == Name.PRESIDENT_BLUE ? 1 : 0;
         // Movement
         foreach (var a in result.Reverse<Action>())
         {

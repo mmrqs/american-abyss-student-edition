@@ -81,15 +81,15 @@ public class GameManager : MonoBehaviour
         currentCharacter = characters[index];
         if (!firstTurn)
         {
-            if (characters[((characters.IndexOf(currentCharacter) - 1) % characters.Count + characters.Count)% characters.Count].Name == "Dr. Green")
+            if (characters[((characters.IndexOf(currentCharacter) - 1) % characters.Count + characters.Count)% characters.Count].Name == Name.DR_GREEN)
                 CalculateMoneyGreen();
         }
 
         
-        if (currentCharacter.Name == " President Blue")
+        if (currentCharacter.Name == Name.PRESIDENT_BLUE)
             superPowerBlue = 2;
         
-        characterName.SetText(currentCharacter.Name);
+        characterName.SetText(currentCharacter.Name.GetString());
         recruitment.enabled = true;
         index++;
 
@@ -207,7 +207,7 @@ public class GameManager : MonoBehaviour
             looser = currentCharacter;
         }
 
-        fightingPopUpUI.BuildUI(currentCharacter.Name, character.Name, die, winner.Name, currentCharacter.NumberOfTroopsDestroyed);
+        fightingPopUpUI.BuildUI(currentCharacter.Name.GetString(), character.Name.GetString(), die, winner.Name.GetString(), currentCharacter.NumberOfTroopsDestroyed);
         
         if (troopManager.GetNumberOfUnitsInArea(area, looser) != 0)
         {
@@ -236,7 +236,7 @@ public class GameManager : MonoBehaviour
         {
             DisplayMessagePopUp("Select an area where you want your troops to move.");
             CurrentMode = Mode.MOVE;
-            List<Zone> zones = Character.Name == " President Blue" ? 
+            List<Zone> zones = Character.Name == Name.PRESIDENT_BLUE ? 
                 troopManager.GetZonesWhereCharacterHasCertainAmountOfUnits(currentCharacter, 1) : 
                 troopManager.GetZonesWhereCharacterHasUnits(currentCharacter);
             areaManager.StartFlashing(zones);   
@@ -288,23 +288,23 @@ public class GameManager : MonoBehaviour
         
         switch (character.Name)
         {
-            case "Agent Yellow":
+            case Name.AGENT_YELLOW:
                 percentage = ((troopManager.GetTotalNumberOfUnitsInField(character) - 1)
                               / (float)troopManager.GetTotalNumberOfUnitsInField(
-                                  characters.Find(c => c.Name == "Colonel Red"))) * 100;
+                                  characters.Find(c => c.Name == Name.COLONEL_RED))) * 100;
                 break;
-            case "Colonel Red":
+            case Name.COLONEL_RED:
                 percentage = ((troopManager.GetTotalControlledZones(character) +
                                troopManager.GetTotalNumberOfUnitsInField(character)) / ((float)character.NbOfTerritoriesToControl + 1)) * 100;
                 break;
-            case "Dr. Green":
+            case Name.DR_GREEN:
                 float m = moneyGreen > 15 ? 15 : moneyGreen;
                 float n = troopManager.GetZonesWhereCharacterHasUnits(character).Count > 4
                     ? 4
                     : troopManager.GetZonesWhereCharacterHasUnits(character).Count;
                 percentage = (((float)(m) / (float)30) * 100) + (((float)n/(float)8) * 100);
                 break;
-            case " President Blue":
+            case Name.PRESIDENT_BLUE:
                 percentage = (troopManager.GetTotalControlledZones(character) / (float)character.NbOfTerritoriesToControl) * 100;
                 break;
         }

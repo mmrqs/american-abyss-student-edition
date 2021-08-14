@@ -15,7 +15,7 @@ public class ChooseFactionUI : MonoBehaviour
     public void show()
     {
         for (int i = 0; i < Characters.Count; i++)
-            buttons[i].GetComponentInChildren<TMP_Text>().SetText(Characters[i].Name);
+            buttons[i].GetComponentInChildren<TMP_Text>().SetText(Characters[i].Name.GetString());
         for(int i = Characters.Count; i < buttons.Count; i++)
             buttons[i].gameObject.SetActive(false);
         gameObject.SetActive(true);
