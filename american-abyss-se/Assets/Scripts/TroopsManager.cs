@@ -167,4 +167,17 @@ public class TroopsManager : MonoBehaviour
             .FindAll(b => b.Character.Name.Equals(character.Name))
             .Count;
     }
+
+    public void ReplaceBoard(Board battalions)
+    {
+        units = new List<Battalion>();
+        foreach (var usZone in battalions.UsZone)
+        {
+            foreach (var character in usZone.Value.Characters)
+            {
+                units.Add(new Battalion(character.Key, usZone.Key, character.Value));
+            }
+        }
+        troopsManagerUI.BuildUI(units);
+    }
 }

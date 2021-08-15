@@ -19,7 +19,7 @@ public class Action
 {
     public Area recruitingZone;
     public (Area, Area, int) movingZone;
-    public (Area, Character) fightingZone;
+    public (Area, Character, Area) fightingZone;
     public List<Transition> transitions;
     public Character character;
     
@@ -52,9 +52,10 @@ public class Action
     public void Fight(float chanceToWin, Area movingZone)
     {
         Character adverser = fightingZone.Item2;
+        fightingZone.Item3 = movingZone;
         Area zone = fightingZone.Item1;
         
-        fightingZone = (zone, adverser);
+        //fightingZone = (zone, adverser);
         
         // créée un état gagnant et un état perdant
         List<Transition> newTransitions = new List<Transition>();
@@ -76,10 +77,10 @@ public class Action
                     winningTransition.board.UsZone[movingZone].Characters.Add(adverser, 0);
 
                 winningTransition.board.UsZone[movingZone].Characters[adverser] += nb;
+                
             }
 
-            winningTransition.board.UsZone[zone].Characters.Remove(adverser);
-            
+            winningTransition.board.UsZone[zone].Characters[adverser] -= nb;            
             // détruit unités
             if (loosingTransition.board.UsZone[zone].Characters[character] > 0)
                 loosingTransition.board.UsZone[zone].Characters[character] -= 1;
@@ -95,7 +96,7 @@ public class Action
                 loosingTransition.board.UsZone[movingZone].Characters[character] += nb;
             }
             
-            loosingTransition.board.UsZone[zone].Characters.Remove(character);
+            loosingTransition.board.UsZone[zone].Characters[character] -= nb;            
             
             newTransitions.Add(winningTransition);
             newTransitions.Add(loosingTransition);
@@ -206,10 +207,10 @@ public class AI
         float payoff = 0;
         foreach (var c in characters)
         {
-            if (c.Name != character.Name && GetCharacterEvaluation(c, board) >= 100)
+            if (c.Name != character.Name && GetVictoryPercentage(c, board) >= 100)
                 payoff = -100;
             else if (payoff >= -100) 
-                payoff = GetCharacterEvaluation(c, board);
+                payoff = GetVictoryPercentage(c, board);
         }
         return payoff;
     }
@@ -346,7 +347,7 @@ public class AI
 
                     if (proba >= 0.40)
                     {
-                        Action clone = new Action(a) {fightingZone = z};
+                        Action clone = new Action(a) {fightingZone = {Item2 = z.Item2, Item1 = z.Item1}};
                         clone.Fight(proba, area);
                         recruitmentAction.Add(clone);
                     }
@@ -403,7 +404,7 @@ public class AI
                     float proba = GetAttackProbabilityOfSuccess(a.character, z.Item1, a.GetBoard());
                     if(proba >= 0.40)
                     {
-                        var clone = new Action(a) {fightingZone = z};
+                        var clone = new Action(a) {fightingZone = {Item2 = z.Item2, Item1 = z.Item1}};
                         clone.Fight(proba, area);
                         temporaryList.Add(clone);
                     }
@@ -452,7 +453,9 @@ public class AI
         foreach (var action in values)
         {
             int index = Characters.FindIndex(p => p.Name == SimulatedPlayer.Name);
-            float actionValue = action.transitions.Sum(transition => Maxn(transition.board, 1, Characters[(index + 1) % Characters.Count], (index + 1) % Characters.Count) * transition.proba);
+            float actionValue = 0;
+            foreach (var transition in action.transitions) 
+                actionValue += Maxn(transition.board, 0, Characters[(index + 1) % Characters.Count], (index + 1) % Characters.Count) * transition.proba;
 
             if (!(actionValue > bestVal)) continue;
             bestMove = action;
@@ -462,7 +465,7 @@ public class AI
         return bestMove;
     }
 
-    public void test(Character character, List<Battalion> board, List<Character> characters)
+    public Action simulate(Character character, List<Battalion> board, List<Character> characters)
     {
         
         Board b = new Board();
@@ -491,5 +494,6 @@ public class AI
             ts.Hours, ts.Minutes, ts.Seconds,
             ts.Milliseconds / 10);
         Debug.Log("RunTime " + elapsedTime);
+        return action;
     }
 }

@@ -8,6 +8,7 @@ ScriptsOnlyBuild:
     - ChooseFactionUI
     - FightingPopUpUI
     - GameManager
+    - MenuManager
     - MenuManagerUI
     - MovingTroopsNumberUI
     - TroopsManager
@@ -63,8 +64,6 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 48
       Script: {instanceID: 0}
-    - Class: 49
-      Script: {instanceID: 0}
     - Class: 64
       Script: {instanceID: 0}
     - Class: 81
@@ -90,8 +89,6 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12168}
     - Class: 114
-      Script: {instanceID: 12194}
-    - Class: 114
       Script: {instanceID: 12282}
     - Class: 114
       Script: {instanceID: 12302}
@@ -108,8 +105,6 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12796}
     - Class: 114
-      Script: {instanceID: 12810}
-    - Class: 114
       Script: {instanceID: 12842}
     - Class: 114
       Script: {instanceID: 12846}
@@ -119,8 +114,6 @@ ScriptsOnlyBuild:
       Script: {instanceID: 13030}
     - Class: 114
       Script: {instanceID: 13070}
-    - Class: 114
-      Script: {instanceID: 13222}
     - Class: 114
       Script: {instanceID: 13370}
     - Class: 114
@@ -148,6 +141,65 @@ ScriptsOnlyBuild:
     - Class: 224
       Script: {instanceID: 0}
     - Class: 225
+      Script: {instanceID: 0}
+    Assets/Scenes/j.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 49
+      Script: {instanceID: 0}
+    - Class: 81
+      Script: {instanceID: 0}
+    - Class: 89
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 108
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 11548}
+    - Class: 114
+      Script: {instanceID: 11638}
+    - Class: 114
+      Script: {instanceID: 11756}
+    - Class: 114
+      Script: {instanceID: 12194}
+    - Class: 114
+      Script: {instanceID: 12566}
+    - Class: 114
+      Script: {instanceID: 12796}
+    - Class: 114
+      Script: {instanceID: 12810}
+    - Class: 114
+      Script: {instanceID: 13004}
+    - Class: 114
+      Script: {instanceID: 13070}
+    - Class: 114
+      Script: {instanceID: 13222}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 196
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
       Script: {instanceID: 0}
   scriptHashData:
   - hash:
@@ -410,7 +462,7 @@ ScriptsOnlyBuild:
     className: MenuManagerUI
   - hash:
       serializedVersion: 2
-      Hash: 4322f2f27761d3e8081666f6f162daf5
+      Hash: c95d290890880bcef813676e90a68a5d
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Character
@@ -504,12 +556,6 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
     className: InputField
-  - hash:
-      serializedVersion: 2
-      Hash: fafcec663d4687b8d56839d4590f9b07
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: InputManager
   - hash:
       serializedVersion: 2
       Hash: c9a8b80298a116835b51ba1cf9284367
@@ -734,5 +780,6 @@ ScriptsOnlyBuild:
     className: AreaManager
   platform: 2
   scenePathNames:
+  - Assets/Scenes/j.unity
   - Assets/Scenes/MainScene.unity
   playerPath: /Users/melaniemarques/Desktop/gametest.app

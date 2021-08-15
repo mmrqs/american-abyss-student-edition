@@ -109,6 +109,9 @@
         <e p="Scripts" t="Include">
           <e p="AdverserInfoUI.cs" t="Include" />
           <e p="AI.cs" t="Include" />
+          <e p="AIChoiceUI.cs" t="Include" />
+          <e p="AIHelper.cs" t="Include" />
+          <e p="AIRecapUI.cs" t="Include" />
           <e p="Area.cs" t="Include" />
           <e p="AreaManager.cs" t="Include" />
           <e p="Areas" t="Include">

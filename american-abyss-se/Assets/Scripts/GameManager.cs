@@ -39,6 +39,10 @@ public class GameManager : MonoBehaviour
     public int superPowerBlue;
     public int moneyGreen;
     private bool firstTurn;
+
+    public List<Name> AIList;
+    public AIHelper aiHelper;
+    public AIRecapUI recapUI;
     
     public Mode CurrentMode
     {
@@ -57,9 +61,9 @@ public class GameManager : MonoBehaviour
             throw new Exception("Empty character list");
         recruitMessage.gameObject.SetActive(false);
         firstTurn = true;
+        aiHelper = new AIHelper(troopManager, fightingPopUpUI, recapUI);
         NextTurn();
-        test = false;
-
+                
     }
 
     void Update()
@@ -94,11 +98,19 @@ public class GameManager : MonoBehaviour
         index++;
 
         CurrentMode = Mode.DEFAULT;
+
+        if (!AIList.Contains(currentCharacter.Name))
+        {
+            recruitment.gameObject.SetActive(true);
+            attackingButton.gameObject.SetActive(false);
+            movingButton.gameObject.SetActive(false);
+            skipButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            aiHelper.SimulatePlayer(troopManager.units.Select(x=> x.Clone()).ToList(), currentCharacter, characters);
+        }
         
-        recruitment.gameObject.SetActive(true);
-        attackingButton.gameObject.SetActive(false);
-        movingButton.gameObject.SetActive(false);
-        skipButton.gameObject.SetActive(true);
         CheckEndGame();
         areaManager.Init();
         recruiting = false;
