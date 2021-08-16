@@ -107,38 +107,44 @@
           </e>
         </e>
         <e p="Scripts" t="Include">
-          <e p="AdverserInfoUI.cs" t="Include" />
-          <e p="AI.cs" t="Include" />
-          <e p="AIChoiceUI.cs" t="Include" />
-          <e p="AIHelper.cs" t="Include" />
-          <e p="AIRecapUI.cs" t="Include" />
-          <e p="Area.cs" t="Include" />
-          <e p="AreaManager.cs" t="Include" />
+          <e p="AI" t="Include">
+            <e p="AI.cs" t="Include" />
+            <e p="AIHelper.cs" t="Include" />
+          </e>
           <e p="Areas" t="Include">
             <e p="Zone.cs" t="Include" />
           </e>
-          <e p="Battalion.cs" t="Include" />
-          <e p="Board.cs" t="Include" />
-          <e p="Character.cs" t="Include" />
-          <e p="CharacterInfoUI.cs" t="Include" />
-          <e p="ChooseFactionUI.cs" t="Include" />
-          <e p="ColorsZone.cs" t="Include" />
-          <e p="FightingPopUpUI.cs" t="Include" />
-          <e p="GameManager.cs" t="Include" />
+          <e p="Managers" t="Include">
+            <e p="AreaManager.cs" t="Include" />
+            <e p="GameManager.cs" t="Include" />
+            <e p="MenuManager.cs" t="Include" />
+            <e p="TroopsManager.cs" t="Include" />
+          </e>
           <e p="Menu" t="Include">
             <e p="MenuManagerUI.cs" t="Include" />
           </e>
-          <e p="MenuManager.cs" t="Include" />
-          <e p="Mode.cs" t="Include" />
-          <e p="MovingTroopsNumberUI.cs" t="Include" />
-          <e p="Name.cs" t="Include" />
-          <e p="SetupZone.cs" t="Include" />
-          <e p="TroopsManager.cs" t="Include" />
+          <e p="Model" t="Include">
+            <e p="Area.cs" t="Include" />
+            <e p="Battalion.cs" t="Include" />
+            <e p="Board.cs" t="Include" />
+            <e p="Character.cs" t="Include" />
+            <e p="ColorsZone.cs" t="Include" />
+            <e p="Mode.cs" t="Include" />
+            <e p="Name.cs" t="Include" />
+            <e p="SetupZone.cs" t="Include" />
+          </e>
           <e p="UI" t="Include">
+            <e p="AdverserInfoUI.cs" t="Include" />
+            <e p="AIChoiceUI.cs" t="Include" />
+            <e p="AIRecapUI.cs" t="Include" />
+            <e p="CharacterInfoUI.cs" t="Include" />
+            <e p="ChooseFactionUI.cs" t="Include" />
+            <e p="FightingPopUpUI.cs" t="Include" />
+            <e p="MovingTroopsNumberUI.cs" t="Include" />
             <e p="TroopsManagerUI.cs" t="Include" />
+            <e p="WinningUI.cs" t="Include" />
             <e p="ZoneScoreUI.cs" t="Include" />
           </e>
-          <e p="WinningUI.cs" t="Include" />
         </e>
       </e>
       <e p="obj" t="ExcludeRecursive" />
